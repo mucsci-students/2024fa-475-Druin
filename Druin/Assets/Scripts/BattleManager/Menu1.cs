@@ -5,14 +5,7 @@ using UnityEngine;
 public class Menu1 : Menu
 {
     // Start is called before the first frame update
-    public override void Start()
-    {
-        
-    }
+    public override void handleInteraction(int pos){
 
-    // Update is called once per frame
-    public override void Update()
-    {
-        
     }
 }

@@ -4,11 +4,12 @@ using UnityEngine;
 
 public abstract class Menu : MonoBehaviour
 {
+
     //set up variables here for classes that inherit this one
-
+    private BattleManager battleManager;
     // Start is called before the first frame update
-    public abstract void Start();
-
-    // Update is called once per frame
-    public abstract void Update();
+    void Start(){
+        battleManager = GameObject.FindObjectOfType<BattleManager>();
+    }
+    public abstract void handleInteraction(int pos);
 }

@@ -1026,8 +1026,9 @@ GameObject:
   - component: {fileID: 422829868}
   - component: {fileID: 422829867}
   - component: {fileID: 422829866}
+  - component: {fileID: 422829870}
   m_Layer: 5
-  m_Name: menu3
+  m_Name: Menu3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1115,6 +1116,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &422829870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422829865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4153610d068cc9d47bca6c6d92672c31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &567478020
 GameObject:
   m_ObjectHideFlags: 0
@@ -2748,8 +2761,9 @@ GameObject:
   - component: {fileID: 943518541}
   - component: {fileID: 943518540}
   - component: {fileID: 943518539}
+  - component: {fileID: 943518543}
   m_Layer: 5
-  m_Name: menu1
+  m_Name: Menu1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2841,6 +2855,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &943518543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943518538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c65002ba63524a4894170083f69c3f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1037355641
 GameObject:
   m_ObjectHideFlags: 0
@@ -3156,8 +3182,9 @@ GameObject:
   - component: {fileID: 1355687431}
   - component: {fileID: 1355687430}
   - component: {fileID: 1355687429}
+  - component: {fileID: 1355687433}
   m_Layer: 5
-  m_Name: menu2
+  m_Name: Menu2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3250,6 +3277,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1355687433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355687428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60f0b49f30dcb63448d02036d2e6e477, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1388737317
 GameObject:
   m_ObjectHideFlags: 0
