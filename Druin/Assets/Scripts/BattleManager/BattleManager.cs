@@ -22,14 +22,14 @@ public class BattleManager : MonoBehaviour
     
     void Start()
     {
-        //player = FindObjectOfType<GameManager>().player;
+        
 
         //used to get the position for the cursor to be at for the menu
         //invisible game objects are placed where the cursor will be when looking at a specific option
         cursorSpaces = new[] {getSpotPos("TriSpot1"), getSpotPos("TriSpot2"), getSpotPos("TriSpot3"), getSpotPos("TriSpot4")};
         
 
-        menuCanvi = new[] {getCanvas("Menu1"), getCanvas("Menu2")};
+        menuCanvi = new[] {getCanvas("Menu1"), getCanvas("Menu2"), getCanvas("Menu3")};
         currentCanvas = menuCanvi[0];
 
         menuScripts = new Menu[] {GameObject.FindObjectOfType<Menu1>(), GameObject.FindObjectOfType<Menu2>(), GameObject.FindObjectOfType<Menu3>()};
@@ -37,6 +37,8 @@ public class BattleManager : MonoBehaviour
         //this code finds the cursor game object and ensures that it is at the start position
         cursor = GameObject.FindWithTag("Cursor");
         setCursorPos(0);
+
+        player = GameObject.Find("Player");
     }
 
     // Update is called once per frame
@@ -108,17 +110,17 @@ public class BattleManager : MonoBehaviour
 
     //changes the menu shown when required
     public void changeMenu(int index){
-        if(index < 2){
-            currentCanvas.GetComponent<Canvas>().enabled = false;
-            currentCanvas = menuCanvi[index];
-            currentCanvas.GetComponent<Canvas>().enabled = true;
-        }
-        //will need to handel interaction for the item menu when that is ready in the editor
+        //turns of the current menu
+        currentCanvas.GetComponent<Canvas>().enabled = false;
+
+        //switches to the next menu and activates it
+        currentCanvas = menuCanvi[index];
+        currentCanvas.GetComponent<Canvas>().enabled = true;
     }
 
     //when the defend option is chosen, will reduce the damage taken for the player
     public void defend(){
-
+        player.GetComponent<PlayerScript>().setDefending();
     }
 
     //when an attack is chosen, will get the values for the attack and apply it to the enemy
@@ -134,6 +136,11 @@ public class BattleManager : MonoBehaviour
     //when the run option is chosen, will attempt to run, and will randomly succeed or fail
     public void attemptToRun(){
 
+    }
+
+
+    public void setEnemy(GameObject foe){
+        enemy = foe;
     }
 
 

@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
         {
             // Start the battle
             Debug.Log($"Battle begins! with {gameObject.name}");
+            GameObject.FindObjectOfType<BattleManager>().setEnemy(gameObject);
         }
     }
 }
