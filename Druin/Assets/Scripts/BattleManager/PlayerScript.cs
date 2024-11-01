@@ -11,6 +11,8 @@ public class PlayerScript : MonoBehaviour
 
     private int attack;
 
+    private Attacks[] attacks;
+
     private int defense;
 
     private bool isDefending;
@@ -30,6 +32,8 @@ public class PlayerScript : MonoBehaviour
         fp = 18 + (2 * level);
         attack = 10 + (3 * level);
         defense = 10 + (2 * level);
+        
+        attacks = new[] {new Attacks("name1", 0, (5 * attack)), new Attacks("name2", 0, (10 * attack)), new Attacks("name3", 0, (12 * attack))};
     }
 
     public int getHP(){
@@ -73,5 +77,17 @@ public class PlayerScript : MonoBehaviour
             defense = defense / 2;
         }
     }
+
+struct Attacks{
+    public string name;
+    public int fpCost;
+    public int damage;
+    public Attacks(string n, int fp, int d){
+        name = n;
+        fpCost = fp;
+        damage = d;
+    }
+}
+    
 
 }
