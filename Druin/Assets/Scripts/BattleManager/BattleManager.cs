@@ -81,7 +81,15 @@ public class BattleManager : MonoBehaviour
         //interacts with the option at the cursors position
         if(Input.GetKeyDown(KeyCode.Space)){
             if(currentCanvas.name == "Menu2"){
-
+                if(checkCursorPos(cursorSpaces[0])){
+                    menuScripts[1].handleInteraction(0);
+                }else if(checkCursorPos(cursorSpaces[1])){
+                    menuScripts[1].handleInteraction(1);
+                }else if(checkCursorPos(cursorSpaces[2])){
+                    menuScripts[1].handleInteraction(2);
+                }else{
+                    menuScripts[1].handleInteraction(3);
+                }
             }else if(currentCanvas.name == "Menu3"){
 
             }else{
@@ -92,11 +100,42 @@ public class BattleManager : MonoBehaviour
                 }else if(checkCursorPos(cursorSpaces[2])){
                     menuScripts[0].handleInteraction(2);
                 }else{
-                    menuScripts[0].handleInteraction(4);
+                    menuScripts[0].handleInteraction(3);
                 }
             }
         }
     }
+
+    //changes the menu shown when required
+    public void changeMenu(int index){
+        if(index < 2){
+            currentCanvas.GetComponent<Canvas>().enabled = false;
+            currentCanvas = menuCanvi[index];
+            currentCanvas.GetComponent<Canvas>().enabled = true;
+        }
+        //will need to handel interaction for the item menu when that is ready in the editor
+    }
+
+    //when the defend option is chosen, will reduce the damage taken for the player
+    public void defend(){
+
+    }
+
+    //when an attack is chosen, will get the values for the attack and apply it to the enemy
+    public void attack(int index){
+
+    }
+
+    //when using an item, will make sure the effects of the item happen properly
+    public void useItem(){
+
+    }
+
+    //when the run option is chosen, will attempt to run, and will randomly succeed or fail
+    public void attemptToRun(){
+
+    }
+
 
     //retrieves the position for a spot the cursor can be
     private Vector3 getSpotPos(string name){
