@@ -34,8 +34,21 @@ public class GameManager : MonoBehaviour
         // Enemy movement
         foreach (GameObject enemy in enemies)
         {
-            // For now, just chase the player
-            enemy.GetComponent<Movement>().MoveTowards(player.transform.position);
+            if (enemy.activeSelf)
+            {
+                // For now, just chase the player
+                enemy.GetComponent<Movement>().MoveTowards(player.transform.position);
+            }
         }
+    }
+
+    public void AddEnemy(GameObject enemy)
+    {
+        enemies.Add(enemy);
+    }
+
+    public void RemoveEnemy(GameObject enemy)
+    {
+        enemies.Remove(enemy);
     }
 }

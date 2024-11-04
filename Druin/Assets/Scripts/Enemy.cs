@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -12,6 +12,16 @@ public abstract class Enemy : MonoBehaviour
             // Start the battle
             Debug.Log($"Battle begins! with {gameObject.name}");
             GameObject.FindObjectOfType<BattleManager>().setEnemy(gameObject);
+        }
+    }
+
+    void OnDestroy()
+    {
+        // Remove this enemy from the GameManager's list
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        if (gameManager != null)
+        {
+            gameManager.RemoveEnemy(gameObject);
         }
     }
 }
