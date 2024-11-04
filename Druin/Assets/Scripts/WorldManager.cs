@@ -16,7 +16,18 @@ public class WorldManager : MonoBehaviour
         // Press Tab to switch worlds
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            SwitchWorlds();
+            if (IsWorldActive("World_Light"))
+            {
+                SwitchToWorld("World_Dark");
+            }
+            else if (IsWorldActive("World_Dark"))
+            {
+                SwitchToWorld("BattleScene");
+            }
+            else
+            {
+                SwitchToWorld("World_Light");
+            }
         }
     }
 
@@ -30,20 +41,47 @@ public class WorldManager : MonoBehaviour
         AsyncOperation loadDark = SceneManager.LoadSceneAsync("World_Dark", LoadSceneMode.Additive);
         yield return loadDark;
 
+        // Load BattleScene and keep it inactive at first
+        AsyncOperation loadBattle = SceneManager.LoadSceneAsync("BattleScene", LoadSceneMode.Additive);
+        yield return loadBattle;
+
         SceneManager.SetActiveScene(SceneManager.GetSceneByName("World_Light"));
 
         // Set initial active states
         SetWorldActive("World_Light", true);
         SetWorldActive("World_Dark", false);
+        SetWorldActive("BattleScene", false);
     }
 
-    public void SwitchWorlds()
+    public void SwitchToWorld(string sceneName)
     {
-        bool isWorldLightActive = IsWorldActive("World_Light");
+        bool isWorldActive = IsWorldActive(sceneName);
+        
+        // Already active
+        if (isWorldActive)
+        {
+            return;
+        }
 
         // Toggle the active states
-        SetWorldActive("World_Light", !isWorldLightActive);
-        SetWorldActive("World_Dark", isWorldLightActive);
+        if (sceneName == "World_Light")
+        {
+            SetWorldActive("World_Light", !isWorldActive);
+            SetWorldActive("World_Dark", isWorldActive);
+            SetWorldActive("BattleScene", isWorldActive);
+        }
+        else if (sceneName == "World_Dark")
+        {
+            SetWorldActive("World_Light", isWorldActive);
+            SetWorldActive("World_Dark", !isWorldActive);
+            SetWorldActive("BattleScene", isWorldActive);
+        }
+        else
+        {
+            SetWorldActive("World_Light", isWorldActive);
+            SetWorldActive("World_Dark", isWorldActive);
+            SetWorldActive("BattleScene", !isWorldActive);
+        }
     }
 
     private bool IsWorldActive(string sceneName)
