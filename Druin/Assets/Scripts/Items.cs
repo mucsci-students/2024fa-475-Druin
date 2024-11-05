@@ -2,22 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Items : MonoBehaviour
+public static class Items : object
 {
-    // Start is called before the first frame update
+    
+    //This variable is meant to hold all the kinds of items we will have
+    //the only interaction with this info is from getItemInfo
+    private static Item[] itemInfo= new[] {new Item("HP Restore", itemAffect.HealthPotion, 10),
+                            new Item("FP Restore", itemAffect.FPPotion, 10),
+                            new Item("Attack Boost", itemAffect.StatBoostAttack, 10),
+                            new Item("Defense Boost", itemAffect.StatBoostDefense, 10),
+                            new Item("Throwing Knife", itemAffect.Throwable, 10)};
 
-    private Item[] itemInfo;
-    void Start()
-    {
-        //Need to fill in the rest of the values, also will need to playtest each item to make sure they balanced
-        itemInfo = new[] {new Item("HP restore", itemAffect.HealthPotion, 10)};
+    public static string getItemName(int index){
+        return itemInfo[index].name;
     }
 
-    public enum itemAffect{
+    public static int getItemVal(int index){
+        return itemInfo[index].value;
+    }
+
+    
+}
+public enum itemAffect{
         HealthPotion,
         FPPotion,
-        StatBoost,
-        Throwable
+        StatBoostAttack,
+        StatBoostDefense,
+        Throwable,
     }
 
     public struct Item{
@@ -40,4 +51,3 @@ public class Items : MonoBehaviour
             value = v;
         }
     }
-}

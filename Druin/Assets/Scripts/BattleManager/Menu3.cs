@@ -13,7 +13,7 @@ public class Menu3 : Menu
     void Start(){
         player = GameObject.FindObjectOfType<PlayerScript>();
         
-        GameObject textObj;
+        //GameObject textObj;
 
         //set up an items array list in playerscript then come back here
     }

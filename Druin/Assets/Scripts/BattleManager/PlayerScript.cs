@@ -23,7 +23,7 @@ public class PlayerScript : MonoBehaviour
 
     private int toNextLevel;
 
-    private Item[] items;
+    private List<itemAffect> items;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +37,7 @@ public class PlayerScript : MonoBehaviour
         
         attacks = new[] {new Attacks("name1", 0, (5 * attack)), new Attacks("name2", 0, (10 * attack)), new Attacks("name3", 0, (12 * attack))};
 
-        items = new[] {};
+        items = new List<itemAffect>();
     }
 
     public int getHP(){
@@ -80,6 +80,24 @@ public class PlayerScript : MonoBehaviour
             isDefending = false;
             defense = defense / 2;
         }
+    }
+
+    public void addItem(Item item){
+        items.Add(item.affect);
+    }
+
+    public List<itemAffect> getAccessToItems(){
+        return items;
+    }
+
+    public bool useItem(itemAffect type){
+        if(items.Contains(type)){
+            items.Remove(type);
+            return true;
+        }else{
+            return false;
+        }
+        
     }
 
 struct Attacks{
