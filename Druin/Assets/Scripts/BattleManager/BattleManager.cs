@@ -92,9 +92,8 @@ public class BattleManager : MonoBehaviour
                 }else{
                     menuScripts[1].handleInteraction(3);
                 }
-            }else if(currentCanvas.name == "Menu3"){
-
-            }else{
+            } 
+            if(currentCanvas.name == "Menu1"){
                 if(checkCursorPos(cursorSpaces[0])){
                     menuScripts[0].handleInteraction(0);
                 }else if(checkCursorPos(cursorSpaces[1])){
@@ -135,7 +134,7 @@ public class BattleManager : MonoBehaviour
 
     //when the run option is chosen, will attempt to run, and will randomly succeed or fail
     public void attemptToRun(){
-
+        
     }
 
 

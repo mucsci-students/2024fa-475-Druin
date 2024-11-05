@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/World_Dark.unity
     guid: 4267883631463e14ebe2f025ddfdaf0a
+  - enabled: 1
+    path: Assets/Scenes/BattleScene.unity
+    guid: c40c5481a3332cf4493d5c6d24de6d12
   m_configObjects: {}

@@ -23,6 +23,8 @@ public class PlayerScript : MonoBehaviour
 
     private int toNextLevel;
 
+    private Item[] items;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +36,8 @@ public class PlayerScript : MonoBehaviour
         defense = 10 + (2 * level);
         
         attacks = new[] {new Attacks("name1", 0, (5 * attack)), new Attacks("name2", 0, (10 * attack)), new Attacks("name3", 0, (12 * attack))};
+
+        items = new[] {};
     }
 
     public int getHP(){
