@@ -9,9 +9,23 @@ public class Enemy : MonoBehaviour
         // Check if the collider belongs to the player
         if (collision.CompareTag("Player"))
         {
-            // Start the battle
-            Debug.Log($"Battle begins! with {gameObject.name}");
-            GameObject.FindObjectOfType<BattleManager>().setEnemy(gameObject);
+            WorldManager wm = FindObjectOfType<WorldManager>();
+            // TODO: Uncomment when hooking battle scene to the main world
+            // BattleManager bm = FindObjectOfType<BattleManager>();
+            // // Start the battle
+
+            // // set enemy of battle manager
+            // bm.setEnemy(gameObject);
+
+            // // set world of battle manager
+            // bm.world = wm.GetActiveWorld();
+
+            // TODO: for testing only
+            wm.world_before_battle = wm.GetActiveWorld();
+            Destroy(gameObject);
+
+            FindObjectOfType<GameManager>().playerControlled = false;
+            wm.SwitchToWorld("BattleScene");
         }
     }
 

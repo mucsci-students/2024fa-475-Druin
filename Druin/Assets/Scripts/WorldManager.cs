@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class WorldManager : MonoBehaviour
 {
+    // TODO: for testing only
+    public string world_before_battle;
+
     void Awake()
     {
         //DontDestroyOnLoad(gameObject);
@@ -22,11 +25,24 @@ public class WorldManager : MonoBehaviour
             }
             else if (IsWorldActive("World_Dark"))
             {
-                SwitchToWorld("BattleScene");
-            }
-            else
-            {
                 SwitchToWorld("World_Light");
+            }
+        }
+
+        // Press k to win  the battle
+        // Press l to lose the battle
+        if (IsWorldActive("BattleScene"))
+        {
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                FindObjectOfType<GameManager>().playerControlled = true;
+                SwitchToWorld(world_before_battle);
+                //Destroy(enemy);
+            }
+            else if (Input.GetKeyDown(KeyCode.L))
+            {
+                FindObjectOfType<GameManager>().playerControlled = true;
+                SwitchToWorld(world_before_battle);
             }
         }
     }
@@ -44,8 +60,6 @@ public class WorldManager : MonoBehaviour
         // Load BattleScene and keep it inactive at first
         AsyncOperation loadBattle = SceneManager.LoadSceneAsync("BattleScene", LoadSceneMode.Additive);
         yield return loadBattle;
-
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("World_Light"));
 
         // Set initial active states
         SetWorldActive("World_Light", true);
@@ -81,6 +95,22 @@ public class WorldManager : MonoBehaviour
             SetWorldActive("World_Light", isWorldActive);
             SetWorldActive("World_Dark", isWorldActive);
             SetWorldActive("BattleScene", !isWorldActive);
+        }
+    }
+
+    public string GetActiveWorld()
+    {
+        if (IsWorldActive("World_Light"))
+        {
+            return "World_Light";
+        }
+        else if (IsWorldActive("World_Dark"))
+        {
+            return "World_Dark";
+        }
+        else
+        {
+            return "BattleScene";
         }
     }
 

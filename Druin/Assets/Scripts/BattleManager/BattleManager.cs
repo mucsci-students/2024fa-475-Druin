@@ -17,6 +17,7 @@ public class BattleManager : MonoBehaviour
     private Vector3[] cursorSpaces;
 
     private GameObject cursor;
+
     
     // Start is called before the first frame update
     
