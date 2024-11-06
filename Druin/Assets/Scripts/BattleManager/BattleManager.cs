@@ -26,7 +26,9 @@ public class BattleManager : MonoBehaviour
 
         //used to get the position for the cursor to be at for the menu
         //invisible game objects are placed where the cursor will be when looking at a specific option
-        cursorSpaces = new[] {getSpotPos("TriSpot1"), getSpotPos("TriSpot2"), getSpotPos("TriSpot3"), getSpotPos("TriSpot4")};
+        cursorSpaces = new[] {getSpotPos("TriSpot1"), getSpotPos("TriSpot2"), getSpotPos("TriSpot3"), getSpotPos("TriSpot4"),
+                                getSpotPos("ItemSpot1"), getSpotPos("ItemSpot2"), getSpotPos("ItemSpot3"), getSpotPos("ItemSpot4"),
+                                getSpotPos("ItemSpot5"), getSpotPos("ItemSpot6")};
         
 
         menuCanvi = new[] {getCanvas("Menu1"), getCanvas("Menu2"), getCanvas("Menu3")};
@@ -45,21 +47,57 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         //pressing the Up arrow key will send the cursor to the top row no matter what column it is in
-        if(Input.GetKeyDown(KeyCode.UpArrow) && (getCursorY() == -4.21f)){
-            if(getCursorX() == -3f){
-                setCursorPos(0);
-            }else{
-                setCursorPos(2);
+        if(Input.GetKeyDown(KeyCode.UpArrow)){
+            if(getCursorY() == -4.21f){
+                if(getCursorX() == -3f){
+                    setCursorPos(0);
+                }else{
+                    setCursorPos(2);
+                }
             }
+            if(getCursorY() == 2f){
+                setCursorPos(4);
+            }
+            if(getCursorY() == 1.05f){
+                setCursorPos(5);
+            }
+            if(getCursorY() == .1f){
+                setCursorPos(6);
+            }
+            if(getCursorY() == -.88f){
+                setCursorPos(7);
+            }
+            if(getCursorY() == -2f){
+                setCursorPos(8);
+            }
+            
         }
 
         //pressing the Down arrow key will send the cursor to the bottom row no matter what column it is in
-        if(Input.GetKeyDown(KeyCode.DownArrow) && (getCursorY() == -2.84f)){
-            if(getCursorX() == -3f){
-                setCursorPos(1);
-            }else{
-                setCursorPos(3);
+        if(Input.GetKeyDown(KeyCode.DownArrow)){
+            if(getCursorY() == -2.84f){
+                if(getCursorX() == -3f){
+                    setCursorPos(1);
+                }else{
+                    setCursorPos(3);
+                }
             }
+            if(getCursorY() == -.88f){
+                setCursorPos(9);
+            }
+            if(getCursorY() == .1f){
+                setCursorPos(8);
+            }
+            if(getCursorY() == 1.05f){
+                setCursorPos(7);
+            }
+            if(getCursorY() == 2f){
+                setCursorPos(6);
+            }
+            if (getCursorY() == 2.95f){
+                setCursorPos(5);
+            }
+            
         }
 
         //pressing the Right arrow key in the 1st column will send it to the 2nd column no matter the row
@@ -104,17 +142,46 @@ public class BattleManager : MonoBehaviour
                     menuScripts[0].handleInteraction(3);
                 }
             }
+            if(currentCanvas.name == "Menu3"){
+                if(checkCursorPos(cursorSpaces[4])){
+                    menuScripts[2].handleInteraction(4);
+                }else if(checkCursorPos(cursorSpaces[5])){
+                    menuScripts[2].handleInteraction(5);
+                }else if(checkCursorPos(cursorSpaces[6])){
+                    menuScripts[2].handleInteraction(6);
+                }else if(checkCursorPos(cursorSpaces[7])){
+                    menuScripts[2].handleInteraction(7);
+                }else if(checkCursorPos(cursorSpaces[8])){
+                    menuScripts[2].handleInteraction(8);
+                }else{
+                    menuScripts[2].handleInteraction(9);
+                }
+            }
         }
     }
 
     //changes the menu shown when required
     public void changeMenu(int index){
         //turns of the current menu
+        
+        if(currentCanvas.name == "Menu3"){
+            GameObject.Find("RectangleBox").GetComponent<SpriteRenderer>().enabled = false;
+            setCursorPos(0);
+        }
         currentCanvas.GetComponent<Canvas>().enabled = false;
 
         //switches to the next menu and activates it
         currentCanvas = menuCanvi[index];
         currentCanvas.GetComponent<Canvas>().enabled = true;
+        if(currentCanvas.name == "Menu3"){
+            GameObject.Find("RectangleBox").GetComponent<SpriteRenderer>().enabled = true;
+            setCursorPos(4);
+            Menu3 m = (Menu3) menuScripts[2];
+            if(m.isLoaded == false){
+               m.loading();
+            }
+            m.updateNums();
+        }
     }
 
     //when the defend option is chosen, will reduce the damage taken for the player

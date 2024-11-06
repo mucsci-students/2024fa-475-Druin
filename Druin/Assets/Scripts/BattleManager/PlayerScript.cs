@@ -86,8 +86,12 @@ public class PlayerScript : MonoBehaviour
         items.Add(item.affect);
     }
 
-    public List<itemAffect> getAccessToItems(){
-        return items;
+    public itemAffect getAccessToItem(int index){
+        return items[index];
+    }
+
+    public int itemAmount(){
+        return items.Count;
     }
 
     public bool useItem(itemAffect type){

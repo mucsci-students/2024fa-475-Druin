@@ -28,7 +28,7 @@ public enum itemAffect{
         FPPotion,
         StatBoostAttack,
         StatBoostDefense,
-        Throwable,
+        Throwable
     }
 
     public struct Item{
