@@ -36,8 +36,7 @@ public class GameManager : MonoBehaviour
         {
             if (enemy.activeSelf)
             {
-                // For now, just chase the player
-                enemy.GetComponent<Movement>().MoveTowards(player.transform.position);
+                enemy.GetComponent<Movement>().MoveRandom();
             }
         }
     }
