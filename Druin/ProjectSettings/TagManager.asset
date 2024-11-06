@@ -45,9 +45,9 @@ TagManager:
   - name: background
     uniqueID: 2357884527
     locked: 0
-  - name: cursor
-    uniqueID: 4194362265
-    locked: 0
   - name: Player
     uniqueID: 2681652821
+    locked: 0
+  - name: cursor
+    uniqueID: 4194362265
     locked: 0
