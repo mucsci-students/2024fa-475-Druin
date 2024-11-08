@@ -10,6 +10,17 @@ public class Enemy : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             WorldManager wm = FindObjectOfType<WorldManager>();
+
+            // TODO: for testing only
+            string activeWorld = wm.GetActiveWorld();
+            if (activeWorld == "BattleScene")
+            {
+                // Already in a battle with another enemy
+                return;
+            }
+            wm.world_before_battle = activeWorld;
+            Destroy(gameObject);
+
             // TODO: Uncomment when hooking battle scene to the main world
             // BattleManager bm = FindObjectOfType<BattleManager>();
             // // Start the battle
@@ -19,10 +30,6 @@ public class Enemy : MonoBehaviour
 
             // // set world of battle manager
             // bm.world = wm.GetActiveWorld();
-
-            // TODO: for testing only
-            wm.world_before_battle = wm.GetActiveWorld();
-            Destroy(gameObject);
 
             FindObjectOfType<GameManager>().playerControlled = false;
             wm.SwitchToWorld("BattleScene");
