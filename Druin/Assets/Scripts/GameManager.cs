@@ -19,8 +19,20 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public bool playerControlled = true;
 
+    public WorldManager worldManager;
+
+    void Start()
+    {
+        worldManager = FindObjectOfType<WorldManager>();
+    }
+
     void Update()
     {
+        if (worldManager.isTransitioning || worldManager.IsWorldActive("BattleScene"))
+        {
+            return;
+        }
+
         // Player movement
         if (playerControlled)
         {

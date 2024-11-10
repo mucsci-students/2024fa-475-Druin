@@ -1,11 +1,16 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class WorldManager : MonoBehaviour
 {
     // TODO: for testing only
     public string world_before_battle;
+
+    public Image whiteOverlay; // Assign this with a fullscreen white UI image
+
+    public bool isTransitioning = false;
 
     void Awake()
     {
@@ -14,35 +19,34 @@ public class WorldManager : MonoBehaviour
         StartCoroutine(LoadScenes());
     }
 
+    void Start()
+    {
+        whiteOverlay = GameObject.Find("WhiteOverlay").GetComponent<Image>();
+    }
+
     void Update()
     {
-        // Press Tab to switch worlds
+        if (isTransitioning)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             if (IsWorldActive("World_Light"))
             {
-                SwitchToWorld("World_Dark");
+                SwitchWorldFading("World_Dark");
             }
             else if (IsWorldActive("World_Dark"))
             {
-                SwitchToWorld("World_Light");
+                SwitchWorldFading("World_Light");
             }
         }
-
-        // Press k to win  the battle
-        // Press l to lose the battle
-        if (IsWorldActive("BattleScene"))
+        else if (IsWorldActive("BattleScene"))
         {
             if (Input.GetKeyDown(KeyCode.K))
             {
-                FindObjectOfType<GameManager>().playerControlled = true;
-                SwitchToWorld(world_before_battle);
-                //Destroy(enemy);
-            }
-            else if (Input.GetKeyDown(KeyCode.L))
-            {
-                FindObjectOfType<GameManager>().playerControlled = true;
-                SwitchToWorld(world_before_battle);
+                SwitchWorldFading(world_before_battle);
             }
         }
     }
@@ -65,6 +69,48 @@ public class WorldManager : MonoBehaviour
         SetWorldActive("World_Light", true);
         SetWorldActive("World_Dark", false);
         SetWorldActive("BattleScene", false);
+    }
+
+    public void SwitchWorldFading(string sceneName)
+    {
+        StartCoroutine(SwitchWorldsWithTransition(sceneName));
+    }
+
+    public IEnumerator SwitchWorldsWithTransition(string sceneName)
+    {
+        isTransitioning = true;
+
+        float transitionDuration = 1f; // the time for fading in/out
+        float elapsed = 0f;
+
+        // Step 1: Fade to white over the transition duration
+        while (elapsed < transitionDuration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Clamp01(elapsed / transitionDuration); // Interpolate from 0 to 1
+            whiteOverlay.color = new Color(1f, 1f, 1f, alpha); // Increase whiteness
+            yield return null;
+        }
+
+        // Ensure it's fully white before switching
+        whiteOverlay.color = new Color(1f, 1f, 1f, 1f);
+
+        // Switch world
+        SwitchToWorld(sceneName);
+
+        // Step 2: Fade back to clear
+        elapsed = 0f;
+        while (elapsed < transitionDuration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Clamp01(1f - (elapsed / transitionDuration)); // Interpolate from 1 to 0
+            whiteOverlay.color = new Color(1f, 1f, 1f, alpha); // Decrease whiteness
+            yield return null;
+        }
+
+        // Ensure overlay is fully transparent at the end
+        whiteOverlay.color = new Color(1f, 1f, 1f, 0f);
+        isTransitioning = false;
     }
 
     public void SwitchToWorld(string sceneName)
@@ -114,12 +160,12 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    private bool IsWorldActive(string sceneName)
+    public bool IsWorldActive(string sceneName)
     {
         return SceneManager.GetSceneByName(sceneName).GetRootGameObjects()[0].activeSelf;
     }
 
-    private void SetWorldActive(string sceneName, bool isActive)
+    public void SetWorldActive(string sceneName, bool isActive)
     {
         if (isActive)
         {

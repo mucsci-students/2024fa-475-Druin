@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
 
             // TODO: for testing only
             string activeWorld = wm.GetActiveWorld();
-            if (activeWorld == "BattleScene")
+            if (wm.isTransitioning || activeWorld == "BattleScene")
             {
                 // Already in a battle with another enemy
                 return;
@@ -31,8 +31,7 @@ public class Enemy : MonoBehaviour
             // // set world of battle manager
             // bm.world = wm.GetActiveWorld();
 
-            FindObjectOfType<GameManager>().playerControlled = false;
-            wm.SwitchToWorld("BattleScene");
+            wm.SwitchWorldFading("BattleScene");
         }
     }
 
