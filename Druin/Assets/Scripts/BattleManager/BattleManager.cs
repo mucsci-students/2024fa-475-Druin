@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DialogueEditor;
 
 public class BattleManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class BattleManager : MonoBehaviour
     private Vector3[] cursorSpaces;
 
     private GameObject cursor;
+
+    private NPCConversation[] battleTexts;
 
     
     // Start is called before the first frame update
@@ -40,6 +43,10 @@ public class BattleManager : MonoBehaviour
         //this code finds the cursor game object and ensures that it is at the start position
         cursor = GameObject.FindWithTag("Cursor");
         setCursorPos(0);
+
+        battleTexts = new[] {GameObject.Find("PlayerAttack1").GetComponent<NPCConversation>()
+                            , GameObject.Find("PlayerAttack2").GetComponent<NPCConversation>()
+                            , GameObject.Find("PlayerAttack3").GetComponent<NPCConversation>()};
 
         player = GameObject.Find("Player");
     }
