@@ -9,7 +9,10 @@ public class ConverstaionTrigger : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        ConversationManager.Instance.StartConversation(conversation);
-        Destroy(gameObject);
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            ConversationManager.Instance.StartConversation(conversation);
+            Destroy(gameObject);
+        }
     }
 }

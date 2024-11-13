@@ -53,7 +53,7 @@ namespace DialogueEditor
             // MDF: Can't active through OnClick()
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                ConversationManager.Instance.EndButtonSelected();
+                ConversationManager.Instance.PressSelectedOption();
             }
 
             if (Hovering)
