@@ -50,8 +50,8 @@ public class BattleManager : MonoBehaviour
 
         player = GameObject.Find("Player");
         playerScript = player.GetComponent<PlayerScript>();
-
-        enemy = GameObject.Find("SampleEnemy").GetComponent<EnemyStats>();
+        playerScript.loadBattle();
+        
 
     }
 

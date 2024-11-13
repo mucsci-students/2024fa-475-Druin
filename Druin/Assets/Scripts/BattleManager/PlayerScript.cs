@@ -28,6 +28,8 @@ public class PlayerScript : MonoBehaviour
 
     public NPCConversation[] battleTexts;
 
+    public int enemy;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,17 +44,7 @@ public class PlayerScript : MonoBehaviour
 
         items = new List<itemAffect>();
 
-        battleTexts = new[] {GameObject.Find("PlayerAttack1").GetComponent<NPCConversation>() //index 0
-                            , GameObject.Find("PlayerAttack2").GetComponent<NPCConversation>() // 1
-                            , GameObject.Find("PlayerAttack3").GetComponent<NPCConversation>() // 2
-                            , GameObject.Find("PlayerDefends").GetComponent<NPCConversation>() // 3
-                            , GameObject.Find("PlayerHPRestore").GetComponent<NPCConversation>() // 4
-                            , GameObject.Find("PlayerFPRestore").GetComponent<NPCConversation>() // 5
-                            , GameObject.Find("PlayerAttackBoost").GetComponent<NPCConversation>() // 6
-                            , GameObject.Find("PlayerDefenseBoost").GetComponent<NPCConversation>() // 7
-                            , GameObject.Find("PlayerUseThrowable").GetComponent<NPCConversation>() // 8
-                            , GameObject.Find("PlayerRunS").GetComponent<NPCConversation>() // 9
-                            , GameObject.Find("PlayerRunF").GetComponent<NPCConversation>()}; // 10
+        
     }
 
     public int getHP(){
@@ -119,7 +111,21 @@ public class PlayerScript : MonoBehaviour
         
     }
 
+    public void loadBattle(){
+        battleTexts = new[] {GameObject.Find("PlayerAttack1").GetComponent<NPCConversation>() //index 0
+                            , GameObject.Find("PlayerAttack2").GetComponent<NPCConversation>() // 1
+                            , GameObject.Find("PlayerAttack3").GetComponent<NPCConversation>() // 2
+                            , GameObject.Find("PlayerDefends").GetComponent<NPCConversation>() // 3
+                            , GameObject.Find("PlayerHPRestore").GetComponent<NPCConversation>() // 4
+                            , GameObject.Find("PlayerFPRestore").GetComponent<NPCConversation>() // 5
+                            , GameObject.Find("PlayerAttackBoost").GetComponent<NPCConversation>() // 6
+                            , GameObject.Find("PlayerDefenseBoost").GetComponent<NPCConversation>() // 7
+                            , GameObject.Find("PlayerUseThrowable").GetComponent<NPCConversation>() // 8
+                            , GameObject.Find("PlayerRunS").GetComponent<NPCConversation>() // 9
+                            , GameObject.Find("PlayerRunF").GetComponent<NPCConversation>()}; // 10
 
+        GameObject.Find("BattleManager").GetComponent<BattleManager>().setEnemy(enemy);
+    }
     
 
 }

@@ -50,6 +50,12 @@ namespace DialogueEditor
 
         private void Update()
         {
+            // MDF: Can't active through OnClick()
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                ConversationManager.Instance.PressSelectedOption();
+            }
+
             if (Hovering)
             {
                 m_hoverT += Time.deltaTime;
@@ -194,7 +200,7 @@ namespace DialogueEditor
 
                 case eButtonType.End:
                     {
-                        TextMesh.text = "Press Space or Enter.";
+                        TextMesh.text = "Press Space to continue.";
                         TextMesh.font = endFont;
                     }
                     break;

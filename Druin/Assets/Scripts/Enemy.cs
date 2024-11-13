@@ -53,11 +53,11 @@ public class Enemy : MonoBehaviour
             if (wm.isTransitioning || activeWorld == "BattleScene") return;
 
             // TODO: Uncomment when hooking battle scene to the main world
-            // BattleManager bm = FindObjectOfType<BattleManager>();
+             PlayerScript ps = FindObjectOfType<PlayerScript>();
             // // Start the battle
 
             // // set enemy of battle manager
-            // bm.setEnemy(gameObject); *depending on the enemy, just pass an int 0-2 instead of the game object*
+             ps.enemy = 0;// *depending on the enemy, just pass an int 0-2 instead of the game object*
 
             // // set world of battle manager
             // bm.world = wm.GetActiveWorld();
