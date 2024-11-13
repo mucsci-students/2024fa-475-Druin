@@ -104,7 +104,11 @@ public class PlayerScript : MonoBehaviour
         
     }
 
-struct Attacks{
+
+    
+
+}
+public struct Attacks{
     public string name;
     public int fpCost;
     public int damage;
@@ -113,7 +117,4 @@ struct Attacks{
         fpCost = fp;
         damage = d;
     }
-}
-    
-
 }

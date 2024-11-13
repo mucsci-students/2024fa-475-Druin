@@ -194,7 +194,7 @@ namespace DialogueEditor
 
                 case eButtonType.End:
                     {
-                        TextMesh.text = "End.";
+                        TextMesh.text = "Press Space or Enter.";
                         TextMesh.font = endFont;
                     }
                     break;
