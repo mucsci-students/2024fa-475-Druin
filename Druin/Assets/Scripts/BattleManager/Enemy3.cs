@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DialogueEditor;
 
-public abstract class Enemy3 : EnemyStats
+public class Enemy3 : EnemyStats
 {
     public override void Start(){
         enemyName = "Enemy3";
@@ -12,5 +13,10 @@ public abstract class Enemy3 : EnemyStats
         EXP = 15;
 
         attacks = new[] {new Attacks("attack1", 0, 10), new Attacks("attack2", 0, 12), new Attacks("attack3", 1, 18)};
+
+        battleTexts = new[] {GameObject.Find("Enemy3Attack1").GetComponent<NPCConversation>()
+                            , GameObject.Find("Enemy3Attack2").GetComponent<NPCConversation>()
+                            , GameObject.Find("Enemy3RunSuccess").GetComponent<NPCConversation>()
+                            , GameObject.Find("Enemy3RunFail").GetComponent<NPCConversation>()};
     }
 }

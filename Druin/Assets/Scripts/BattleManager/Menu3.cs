@@ -53,19 +53,19 @@ public class Menu3 : Menu
     
     public override void handleInteraction(int pos){
         if(pos == 4){
-
+            battleManager.useItem(0);
         }
         if(pos == 5){
-
+            battleManager.useItem(1);
         }
         if(pos == 6){
-
+            battleManager.useItem(2);
         }
         if(pos == 7){
-
+            battleManager.useItem(3);
         }
         if(pos == 8){
-
+            battleManager.useItem(4);
         }
         if(pos == 9){
             battleManager.changeMenu(0);

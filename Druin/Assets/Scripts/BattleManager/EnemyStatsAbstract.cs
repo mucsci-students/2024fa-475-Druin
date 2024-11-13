@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DialogueEditor;
 
 public abstract class EnemyStats : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public abstract class EnemyStats : MonoBehaviour
     public int EXP;
 
     public Attacks[] attacks;
+
+    public NPCConversation[] battleTexts;
 
     public abstract void Start();
 }

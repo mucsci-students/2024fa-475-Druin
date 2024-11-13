@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using DialogueEditor;
 
@@ -7,10 +8,11 @@ public class BattleManager : MonoBehaviour
 {
     private int turnCount;
 
-    private bool playersTurn;
+    private bool enemysTurn;
     private GameObject player;
+    private PlayerScript playerScript;
 
-    private GameObject enemy;
+    private EnemyStats enemy;
 
     private GameObject[] menuCanvi;
 
@@ -22,15 +24,13 @@ public class BattleManager : MonoBehaviour
 
     private GameObject cursor;
 
-    private NPCConversation[] battleTexts;
-
     
     // Start is called before the first frame update
     
     void Start()
     {
         turnCount = 1;
-        playersTurn = true;
+        enemysTurn = false;
 
         //used to get the position for the cursor to be at for the menu
         //invisible game objects are placed where the cursor will be when looking at a specific option
@@ -48,24 +48,17 @@ public class BattleManager : MonoBehaviour
         cursor = GameObject.FindWithTag("Cursor");
         setCursorPos(0);
 
-        battleTexts = new[] {GameObject.Find("PlayerAttack1").GetComponent<NPCConversation>()
-                            , GameObject.Find("PlayerAttack2").GetComponent<NPCConversation>()
-                            , GameObject.Find("PlayerAttack3").GetComponent<NPCConversation>()
-                            , GameObject.Find("PlayerDefeneds").GetComponent<NPCConversation>()
-                            , GameObject.Find("PlayerHPRestore").GetComponent<NPCConversation>()
-                            , GameObject.Find("PlayerFPRestore").GetComponent<NPCConversation>()
-                            , GameObject.Find("PlayerAttackBoost").GetComponent<NPCConversation>()
-                            , GameObject.Find("PlayerDefenseBoost").GetComponent<NPCConversation>()
-                            , GameObject.Find("PlayerUseThrowable").GetComponent<NPCConversation>()};
-
         player = GameObject.Find("Player");
+        playerScript = player.GetComponent<PlayerScript>();
+
+        enemy = GameObject.Find("SampleEnemy").GetComponent<EnemyStats>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(playersTurn){
+        if(ConversationManager.Instance != null && !ConversationManager.Instance.IsConversationActive){
             //pressing the Up arrow key will send the cursor to the top row no matter what column it is in
             if(Input.GetKeyDown(KeyCode.UpArrow)){
                 if(getCursorY() == -4.21f){
@@ -140,17 +133,6 @@ public class BattleManager : MonoBehaviour
 
             //interacts with the option at the cursors position
             if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)){
-                if(currentCanvas.name == "Menu2"){
-                    if(checkCursorPos(cursorSpaces[0])){
-                        menuScripts[1].handleInteraction(0);
-                    }else if(checkCursorPos(cursorSpaces[1])){
-                        menuScripts[1].handleInteraction(1);
-                    }else if(checkCursorPos(cursorSpaces[2])){
-                        menuScripts[1].handleInteraction(2);
-                    }else{
-                        menuScripts[1].handleInteraction(3);
-                    }
-                } 
                 if(currentCanvas.name == "Menu1"){
                     if(checkCursorPos(cursorSpaces[0])){
                         menuScripts[0].handleInteraction(0);
@@ -162,7 +144,18 @@ public class BattleManager : MonoBehaviour
                         menuScripts[0].handleInteraction(3);
                     }
                 }
-                if(currentCanvas.name == "Menu3"){
+                else if(currentCanvas.name == "Menu2"){
+                    if(checkCursorPos(cursorSpaces[0])){
+                        menuScripts[1].handleInteraction(0);
+                    }else if(checkCursorPos(cursorSpaces[1])){
+                        menuScripts[1].handleInteraction(1);
+                    }else if(checkCursorPos(cursorSpaces[2])){
+                        menuScripts[1].handleInteraction(2);
+                    }else{
+                        menuScripts[1].handleInteraction(3);
+                    }
+                } 
+                else if(currentCanvas.name == "Menu3"){
                     if(checkCursorPos(cursorSpaces[4])){
                         menuScripts[2].handleInteraction(4);
                     }else if(checkCursorPos(cursorSpaces[5])){
@@ -179,11 +172,19 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }else{
-            if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)){
-                if(ConversationManager.Instance != null && ConversationManager.Instance.IsConversationActive){
-                    ConversationManager.Instance.PressSelectedOption();
-                }
-            }
+                
+                    if(!enemysTurn){
+                        if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)){
+                        ConversationManager.Instance.PressSelectedOption();
+                        enemyDecisions();
+                        }
+                    }else{
+                        if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)){
+                        enemysTurn = false;
+                        ConversationManager.Instance.PressSelectedOption();
+                        }
+                    }
+            
         }
     }
 
@@ -193,7 +194,6 @@ public class BattleManager : MonoBehaviour
         
         if(currentCanvas.name == "Menu3"){
             GameObject.Find("RectangleBox").GetComponent<SpriteRenderer>().enabled = false;
-            setCursorPos(0);
         }
         currentCanvas.GetComponent<Canvas>().enabled = false;
 
@@ -214,70 +214,93 @@ public class BattleManager : MonoBehaviour
 
     //when the defend option is chosen, will reduce the damage taken for the player
     public void defend(){
-        player.GetComponent<PlayerScript>().setDefending();
+        playerScript.setDefending();
+        ConversationManager.Instance.StartConversation(playerScript.battleTexts[3]);
     }
 
     //when an attack is chosen, will get the values for the attack and apply it to the enemy
     public void attack(int index, bool isPlayer){
         if(isPlayer){
-            player.GetComponent<PlayerScript>().stopDefending();
-            playersTurn = false;
-            switch (index){
-                case 0:
-                    //first get the info about the attack from the player
-                    //then implement the math for attacking enemy
-                    ConversationManager.Instance.StartConversation(battleTexts[0]);
-                    break;
-                case 1:
-                    //get info about 2nd attack
-                    //implement math against enemy
-                    ConversationManager.Instance.StartConversation(battleTexts[1]);
-                    break;
-                case 2:
-                    //same as above
-                    ConversationManager.Instance.StartConversation(battleTexts[2]);
-                    break;
-                default:
-                    //nothing to do
-                    break;
+            playerScript.stopDefending();
+            if(index == 0){
+                //first get the info about the attack from the player
+                //then implement the math for attacking enemy
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[0]);
+            }else if(index == 1){
+                //get info about 2nd attack
+                //implement math against enemy
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[1]);
+            }else{
+                //same as above
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[2]);
             }
+            
         }else{
-
+            if(index == 0){
+                //Enemy attack 1
+                ConversationManager.Instance.StartConversation(enemy.battleTexts[0]);
+            }else{
+                //Enemy attack 2
+                ConversationManager.Instance.StartConversation(enemy.battleTexts[1]);
+            }
         }
     }
 
     //when using an item, will make sure the effects of the item happen properly
     public void useItem(int used){
-        player.GetComponent<PlayerScript>().stopDefending();
-        playersTurn = false;
-        switch (used){
-            case 0:
-                //use item
-                break;
-            case 1:
-                //use item
-                break;
-            case 2:
-                //use item
-                break;
-            case 3:
-                //use item
-                break;
-            case 4:
-                //use item
-                break;
+        playerScript.stopDefending();
+        if(used == 0){
+            //use item
+            ConversationManager.Instance.StartConversation(playerScript.battleTexts[4]); //HP Dialogue
+        }else if(used == 1){
+            //use item
+            ConversationManager.Instance.StartConversation(playerScript.battleTexts[5]); //FP Dialogue
+        }else if(used == 2){
+            //use item
+            ConversationManager.Instance.StartConversation(playerScript.battleTexts[6]); //AttackBoostDialogue
+        }else if(used == 3){
+            //use item
+            ConversationManager.Instance.StartConversation(playerScript.battleTexts[7]); //DefenseDialogue
+        }else{
+            //use item
+            ConversationManager.Instance.StartConversation(playerScript.battleTexts[8]); //ThrowablesDialogue
         }
 
     }
 
     //when the run option is chosen, will attempt to run, and will randomly succeed or fail
-    public void attemptToRun(){
-        player.GetComponent<PlayerScript>().stopDefending();
+    public void attemptToRun(bool isPlayer){
+        System.Random rand = new System.Random();
+
+            
+
+
+        if(isPlayer){
+            playerScript.stopDefending();
+            if(rand.Next(1,101) <= 75){
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[9]);
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[10]);
+            }
+
+        }else{
+            if(rand.Next(1,101) >= 80){
+                ConversationManager.Instance.StartConversation(enemy.battleTexts[2]);
+            }else{
+                ConversationManager.Instance.StartConversation(enemy.battleTexts[3]);
+            }
+        }
     }
 
 
-    public void setEnemy(GameObject foe){
-        enemy = foe;
+    public void setEnemy(int foe){
+        if(foe == 0){
+            enemy = GameObject.FindObjectOfType<Enemy1>();
+        }else if(foe == 1){
+            enemy = GameObject.FindObjectOfType<Enemy2>();
+        }else{
+            enemy = GameObject.FindObjectOfType<Enemy3>();
+        }
     }
 
 
@@ -308,5 +331,18 @@ public class BattleManager : MonoBehaviour
     //returns the current y value for the cursors position
     private float getCursorY(){
         return cursor.GetComponent<Transform>().position.y;
+    }
+
+
+    private void enemyDecisions(){
+        System.Random rand = new System.Random();
+
+        if(rand.Next(1, 101) <= 90){
+            attack(rand.Next(0,4), false);
+        }else{
+            attemptToRun(false);
+        }
+        enemysTurn = true;
+        turnCount++;
     }
 }

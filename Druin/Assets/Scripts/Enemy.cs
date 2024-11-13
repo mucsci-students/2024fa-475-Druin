@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviour
             // // Start the battle
 
             // // set enemy of battle manager
-            // bm.setEnemy(gameObject);
+            // bm.setEnemy(gameObject); *depending on the enemy, just pass an int 0-2 instead of the game object*
 
             // // set world of battle manager
             // bm.world = wm.GetActiveWorld();

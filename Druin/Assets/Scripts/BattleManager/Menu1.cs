@@ -16,7 +16,7 @@ public class Menu1 : Menu
             battleManager.changeMenu(2);
         }
         if(pos == 3){
-            battleManager.attemptToRun();
+            battleManager.attemptToRun(true);
         }
     }
 }
