@@ -12,6 +12,7 @@ TagManager:
   - GhostDark
   - BatLight
   - BatDark
+  - Boss
   layers:
   - Default
   - TransparentFX
