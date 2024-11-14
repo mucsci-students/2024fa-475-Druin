@@ -7,14 +7,14 @@ public class Enemy2 : EnemyStats
 {
     public override void Start(){
         enemyName = "Enemy2";
-        HP = 100;
+        HP = 200;
         Attack = 50;
         Defense = 3;
         EXP = 15;
         isBoss = false;
-        
 
-        attacks = new[] {new Attacks("attack1", 0, 10), new Attacks("attack2", 0, 12), new Attacks("attack3", 1, 18)};
+
+        attacks = new[] {new Attacks("attack1", 0, 8), new Attacks("attack2", 0, 16), new Attacks("attack3", 1, 22)};
 
         battleTexts = new[] {GameObject.Find("Enemy2Attack1").GetComponent<NPCConversation>()
                             , GameObject.Find("Enemy2Attack2").GetComponent<NPCConversation>()
@@ -23,6 +23,6 @@ public class Enemy2 : EnemyStats
     }
 
     public override void resetStats(){
-        HP = 100;
+        HP = 200;
     }
 }
