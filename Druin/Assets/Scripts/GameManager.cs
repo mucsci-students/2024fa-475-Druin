@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
 
     public WorldManager worldManager;
 
+    public bool puzzleSolved = false;
+
     void Start()
     {
         worldManager = FindObjectOfType<WorldManager>();

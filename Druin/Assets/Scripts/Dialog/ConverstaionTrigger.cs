@@ -11,7 +11,16 @@ public class ConverstaionTrigger : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            if (name == "SolvedPuzzle")
+            {
+                FindObjectOfType<GameManager>().puzzleSolved = true;
+            }
             ConversationManager.Instance.StartConversation(conversation);
+            if (FindObjectOfType<GameManager>().puzzleSolved)
+            {
+                // MDF: May print warning, doesn't matter
+                ConversationManager.Instance.SetBool("PuzzleSolved", true);
+            }
             Destroy(gameObject);
         }
     }
