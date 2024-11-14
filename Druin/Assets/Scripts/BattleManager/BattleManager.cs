@@ -269,6 +269,7 @@ public class BattleManager : MonoBehaviour
                         if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)){
                         ConversationManager.Instance.PressSelectedOption();
                         updateNums();
+                        changeMenu(0);
                         if(runSuccess == true){
                             endBattle();
                         }else{
