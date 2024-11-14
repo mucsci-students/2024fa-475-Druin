@@ -10,10 +10,13 @@ public class Movement : MonoBehaviour
     public LayerMask borderLayerMask; // Expose this field in the Inspector
 
     public Vector2 CurrentDirection => currentDirection;
+    private bool facingRight = true;
+    private Animator animator;
 
     void Start()
     {
         borderLayerMask = LayerMask.GetMask("Border");
+        animator = GetComponent<Animator>();
     }
 
     public void Move()
@@ -26,9 +29,35 @@ public class Movement : MonoBehaviour
         if (moveVector != Vector2.zero)
         {
             currentDirection = moveVector.normalized;
-        }
 
+            // Set animation based on movement direction
+            if (moveY < 0) // Moving down
+            {
+                animator.Play("PlayerForwardWalk");
+            }
+            else if (moveY > 0) // Moving up
+            {
+                animator.Play("PlayerBackWalk");
+            }
+            else if (moveX != 0) // Moving left or right
+            {
+                animator.Play("PlayerSideWalk");
+                FlipSprite(moveX); // Flip the sprite based on left/right direction
+            }
+        }
         transform.Translate(moveVector);
+    }
+
+    private void FlipSprite(float moveX)
+    {
+        // Check if facing direction needs to change
+        if ((moveX > 0 && !facingRight) || (moveX < 0 && facingRight))
+        {
+            facingRight = !facingRight;
+            Vector3 scale = transform.localScale;
+            scale.x *= -1; // Flip the x scale to mirror the sprite
+            transform.localScale = scale;
+        }
     }
 
     public void MoveTowards(Vector2 destination)
