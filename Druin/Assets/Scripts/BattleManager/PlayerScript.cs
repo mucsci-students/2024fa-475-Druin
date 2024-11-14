@@ -6,23 +6,23 @@ using DialogueEditor;
 public class PlayerScript : MonoBehaviour
 {
 
-    private int hp;
+    public int hp;
 
-    private int fp;
+    public int fp;
 
-    private int attack;
+    public int attack;
 
-    private Attacks[] attacks;
+    public Attacks[] attacks;
 
-    private int defense;
+    public int defense;
 
     private bool isDefending;
 
-    private int level;
+    public int level;
 
-    private int exp;
+    public int exp;
 
-    private int toNextLevel;
+    public int toNextLevel;
 
     private List<itemAffect> items;
 
@@ -45,34 +45,6 @@ public class PlayerScript : MonoBehaviour
         items = new List<itemAffect>();
 
         
-    }
-
-    public int getHP(){
-        return hp;
-    }
-
-    public void setHP(int val){
-        hp = val;
-    }
-
-    public int getFP(){
-        return fp;
-    }
-
-    public void setFP(int val){
-        fp = val;
-    }
-
-    public int getExp(){
-        return exp;
-    }
-
-    public void addExp(int val){
-        exp += val;
-    }
-
-    public int getLevel(){
-        return level;
     }
 
     public void setDefending(){
