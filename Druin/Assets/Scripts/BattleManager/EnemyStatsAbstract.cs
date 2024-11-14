@@ -15,9 +15,13 @@ public abstract class EnemyStats : MonoBehaviour
 
     public int EXP;
 
+    public bool isDark;
+
     public Attacks[] attacks;
 
     public NPCConversation[] battleTexts;
 
     public abstract void Start();
+
+    public abstract void resetStats();
 }

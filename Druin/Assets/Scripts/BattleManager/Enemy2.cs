@@ -9,7 +9,7 @@ public class Enemy2 : EnemyStats
         enemyName = "Enemy2";
         HP = 100;
         Attack = 50;
-        Defense = 25;
+        Defense = 3;
         EXP = 15;
 
         attacks = new[] {new Attacks("attack1", 0, 10), new Attacks("attack2", 0, 12), new Attacks("attack3", 1, 18)};
@@ -18,5 +18,9 @@ public class Enemy2 : EnemyStats
                             , GameObject.Find("Enemy2Attack2").GetComponent<NPCConversation>()
                             , GameObject.Find("Enemy2RunSuccess").GetComponent<NPCConversation>()
                             , GameObject.Find("Enemy2RunFail").GetComponent<NPCConversation>()};
+    }
+
+    public override void resetStats(){
+        HP = 100;
     }
 }

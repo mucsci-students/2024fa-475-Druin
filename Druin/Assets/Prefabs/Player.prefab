@@ -114,7 +114,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!60 &-2871188014331009895
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -194,4 +194,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529df4df882574cc5b0d717f2eae2946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 0
+  fp: 0
+  attack: 0
+  defense: 0
+  level: 0
+  exp: 0
+  toNextLevel: 0
   battleTexts: []

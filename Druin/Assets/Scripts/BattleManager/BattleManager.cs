@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using DialogueEditor;
 
 public class BattleManager : MonoBehaviour
@@ -12,6 +13,8 @@ public class BattleManager : MonoBehaviour
     all of these are private just to ensure that they can only change through
     the allowed methods
     */
+    public bool isReady = false;
+
 
     //The turn count for battle
     private int turnCount;
@@ -19,6 +22,8 @@ public class BattleManager : MonoBehaviour
     //determins if it is the enemies turn or not
     //is used to make sure battle messages progress properly
     private bool enemysTurn;
+
+    private bool runSuccess;
 
     //both are used to interact with the player in the battle scene
     private GameObject player;
@@ -44,6 +49,8 @@ public class BattleManager : MonoBehaviour
     //The cursor
     private GameObject cursor;
 
+    private GameObject[] sprites;
+
     
     // Start is called before the first frame update
     
@@ -51,6 +58,7 @@ public class BattleManager : MonoBehaviour
     {
         turnCount = 1;
         enemysTurn = false;
+        runSuccess = false;
 
         //used to get the position for the cursor to be at for the menu
         //invisible game objects are placed where the cursor will be when looking at a specific option
@@ -61,10 +69,17 @@ public class BattleManager : MonoBehaviour
 
         //Collects the battle menus
         //then assigns the default canvas
-        menuCanvi = new[] {getCanvas("Menu1"), getCanvas("Menu2"), getCanvas("Menu3")};
+        menuCanvi = new[] {getCanvas("Menu1"), getCanvas("Menu2"), getCanvas("Menu3"), getCanvas("Stats")};
         currentCanvas = menuCanvi[0];
 
         menuScripts = new Menu[] {GameObject.FindObjectOfType<Menu1>(), GameObject.FindObjectOfType<Menu2>(), GameObject.FindObjectOfType<Menu3>()};
+
+        sprites = new[] {GameObject.Find("PumpkinLight")
+                            ,GameObject.Find("PumpkinDark")
+                            ,GameObject.Find("GhostLight")
+                            ,GameObject.Find("GhostDark")
+                            ,GameObject.Find("BatLight")
+                            ,GameObject.Find("BatDark")};
 
         //this code finds the cursor game object and ensures that it is at the start position
         cursor = GameObject.FindWithTag("Cursor");
@@ -76,14 +91,18 @@ public class BattleManager : MonoBehaviour
         playerScript = player.GetComponent<PlayerScript>();
         //used to load the battle messages in the player script
         //also used to assign which enemy will be used in battle
-        playerScript.loadBattle();
-        
-
+        playerScript.loadBattleTexts();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!isReady){
+            isReady = true;
+            updateNums();
+            updatePos(true);
+        }
+
         /*The start of this monstrosity controls the movement of the cursor.
         Whenever an option is chosen that would end the players turn,
         A message will be displayed which will pause interaction with the menus
@@ -92,7 +111,7 @@ public class BattleManager : MonoBehaviour
 
 
             //in menu 1 or 2, pressing the up key will ensure that the cursor goes to the top row
-            if(Input.GetKeyDown(KeyCode.UpArrow)){
+            if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)){
                 if(getCursorY() == -4.21f){
                     if(getCursorX() == -3f){
                         setCursorPos(0);
@@ -121,7 +140,7 @@ public class BattleManager : MonoBehaviour
             }
 
             //In menu 1 or 2, will ensure that the cursor goes to the bottom row
-            if(Input.GetKeyDown(KeyCode.DownArrow)){
+            if(Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)){
                 if(getCursorY() == -2.84f){
                     if(getCursorX() == -3f){
                         setCursorPos(1);
@@ -150,7 +169,7 @@ public class BattleManager : MonoBehaviour
             }
 
             //for menu 1 or 2, will ensure that the cursor goes to the 2nd column
-            if(Input.GetKeyDown(KeyCode.RightArrow) && (getCursorX() == -3f)){
+            if((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && (getCursorX() == -3f)){
                 if(getCursorY() == -2.84f){
                     setCursorPos(2);
                 }else{
@@ -159,7 +178,7 @@ public class BattleManager : MonoBehaviour
             }
 
             //for menu 1 or 2, will ensure that the cursor goes to the 1st column
-            if(Input.GetKeyDown(KeyCode.LeftArrow) && (getCursorX() == 0.8f)){
+            if((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && (getCursorX() == 0.8f)){
                 if(getCursorY() == -2.84f){
                     setCursorPos(0);
                 }else{
@@ -249,7 +268,12 @@ public class BattleManager : MonoBehaviour
                     if(!enemysTurn){
                         if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)){
                         ConversationManager.Instance.PressSelectedOption();
-                        enemyDecisions();
+                        updateNums();
+                        if(runSuccess == true){
+                            endBattle();
+                        }else{
+                            enemyDecisions();
+                        }
                         }
 
                         //will handle interaction with the enemy battle messages
@@ -257,6 +281,10 @@ public class BattleManager : MonoBehaviour
                         if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)){
                         enemysTurn = false;
                         ConversationManager.Instance.PressSelectedOption();
+                        updateNums();
+                        if(playerScript.hp <= 0 || runSuccess == true){
+                            endBattle();
+                        }
                         }
                     }
             
@@ -270,6 +298,7 @@ public class BattleManager : MonoBehaviour
         //if it is turns off the background for the item menu
         if(currentCanvas.name == "Menu3"){
             GameObject.Find("RectangleBox").GetComponent<SpriteRenderer>().enabled = false;
+            menuCanvi[3].GetComponent<Canvas>().enabled = true;
         }
 
         //disables the current battle menu
@@ -286,6 +315,7 @@ public class BattleManager : MonoBehaviour
         //will activate the item menu background
         //ensures that the cursor is at the initial position for the item menu
         if(currentCanvas.name == "Menu3"){
+            menuCanvi[3].GetComponent<Canvas>().enabled = false;
             GameObject.Find("RectangleBox").GetComponent<SpriteRenderer>().enabled = true;
             setCursorPos(4);
 
@@ -315,10 +345,12 @@ public class BattleManager : MonoBehaviour
 
             //ensures that if the player was defending last turn that it will be turned off
             playerScript.stopDefending();
+            Attacks a;
+            int FPCost;
 
             //will call for the information of attack 1 from the player
             if(index == 0){
-                Attacks a = playerScript.attacks[0];
+                a = playerScript.attacks[0];
                 int damage = a.damage;
                 damage -= enemy.Defense;
                 if(damage > 0){
@@ -329,23 +361,39 @@ public class BattleManager : MonoBehaviour
 
                 //will call for the information of attack 2 from the player
             }else if(index == 1){
-                Attacks a = playerScript.attacks[1];
-                int damage = a.damage;
-                damage -= enemy.Defense;
-                if(damage > 0){
-                    enemy.HP -= damage;
+                a = playerScript.attacks[1];
+                FPCost = a.fpCost;
+                if((playerScript.fp - FPCost) >= 0){
+                    int damage = a.damage;
+                    damage -= enemy.Defense;
+                    if(damage > 0){
+                        enemy.HP -= damage;
+                    }
+
+                    playerScript.fp -= FPCost;
+                    ConversationManager.Instance.StartConversation(playerScript.battleTexts[1]);
+                }else{
+                    ConversationManager.Instance.StartConversation(playerScript.battleTexts[11]);
                 }
-                ConversationManager.Instance.StartConversation(playerScript.battleTexts[1]);
+                
 
                 //will call for the information of attack 3 from the player
-            }else{
-                Attacks a = playerScript.attacks[2];
-                int damage = a.damage;
-                damage -= enemy.Defense;
-                if(damage > 0){
-                    enemy.HP -= damage;
+            }else if(index == 2){
+                a = playerScript.attacks[2];
+                FPCost = a.fpCost;
+                if((playerScript.fp - FPCost) >= 0){
+                    int damage = a.damage;
+                    damage -= enemy.Defense;
+                    if(damage > 0){
+                        enemy.HP -= damage;
+                    }
+
+                    playerScript.fp -= FPCost;
+                    ConversationManager.Instance.StartConversation(playerScript.battleTexts[2]);
+                }else{
+                    ConversationManager.Instance.StartConversation(playerScript.battleTexts[11]);
                 }
-                ConversationManager.Instance.StartConversation(playerScript.battleTexts[2]);
+                
             }
             
         }else{
@@ -376,26 +424,48 @@ public class BattleManager : MonoBehaviour
     public void useItem(int used){
         playerScript.stopDefending();
         if(used == 0){
-            //Check to see if the player has an item of this type
-            Item item = Items.itemInfo[0];
-            playerScript.hp += item.value;
-            ConversationManager.Instance.StartConversation(playerScript.battleTexts[4]); //HP Dialogue
+            if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.HealthPotion)){
+                Item item = Items.itemInfo[0];
+                playerScript.hp += item.value;
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[4]); //HP Dialogue
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
+            }
+            
         }else if(used == 1){
-            //Check to see if player has an item of this type
-            Item item = Items.itemInfo[1];
-            playerScript.fp += item.value;
-            ConversationManager.Instance.StartConversation(playerScript.battleTexts[5]); //FP Dialogue
+            if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.FPPotion)){
+                Item item = Items.itemInfo[1];
+                playerScript.fp += item.value;
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[5]); //FP Dialogue
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
+            }
+            
         }else if(used == 2){
-            //use item
-            ConversationManager.Instance.StartConversation(playerScript.battleTexts[6]); //AttackBoostDialogue
+            if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.StatBoostAttack)){
+                playerScript.boostAttack();
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[6]); //AttackBoostDialogue
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
+            }
+            
         }else if(used == 3){
-            //use item
-            ConversationManager.Instance.StartConversation(playerScript.battleTexts[7]); //DefenseDialogue
+            if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.StatBoostAttack)){
+                playerScript.boostDefense();
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[7]); //DefenseDialogue
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
+            }
+            
         }else{
-            //check to see if player has an item of this type
-            Item item = Items.itemInfo[1];
-            enemy.HP -= item.value;
-            ConversationManager.Instance.StartConversation(playerScript.battleTexts[8]); //ThrowablesDialogue
+            if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.Throwable)){
+                Item item = Items.itemInfo[1];
+                enemy.HP -= item.value;
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[8]); //ThrowablesDialogue
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
+            }
+            
         }
 
         //creat method to update bars for player and enemy
@@ -412,6 +482,7 @@ public class BattleManager : MonoBehaviour
         if(isPlayer){
             playerScript.stopDefending();
             if(rand.Next(1,101) <= 75){
+                runSuccess = true;
                 ConversationManager.Instance.StartConversation(playerScript.battleTexts[9]);
             }else{
                 ConversationManager.Instance.StartConversation(playerScript.battleTexts[10]);
@@ -419,6 +490,7 @@ public class BattleManager : MonoBehaviour
 
         }else{
             if(rand.Next(1,101) >= 80){
+                runSuccess = true;
                 ConversationManager.Instance.StartConversation(enemy.battleTexts[2]);
             }else{
                 ConversationManager.Instance.StartConversation(enemy.battleTexts[3]);
@@ -427,14 +499,21 @@ public class BattleManager : MonoBehaviour
     }
 
 
-    public void setEnemy(int foe){
-        if(foe == 0){
-            enemy = GameObject.FindObjectOfType<Enemy1>();
-        }else if(foe == 1){
-            enemy = GameObject.FindObjectOfType<Enemy2>();
-        }else if(foe == 2){
-            enemy = GameObject.FindObjectOfType<Enemy3>();
+    public void setEnemy(int foe, bool isDark){
+        if(enemy != null){
+            updatePos(false);
         }
+        if(foe == 0){
+            enemy = GameObject.FindObjectOfType<Enemy1>(true);
+            enemy.isDark = isDark;
+        }else if(foe == 1){
+            enemy = GameObject.FindObjectOfType<Enemy2>(true);
+            enemy.isDark = isDark;
+        }else if(foe == 2){
+            enemy = GameObject.FindObjectOfType<Enemy3>(true);
+            enemy.isDark = isDark;
+        }
+        isReady = false;
     }
 
 
@@ -468,8 +547,50 @@ public class BattleManager : MonoBehaviour
     }
 
 
+    private void updateNums(){
+        GameObject.Find("PlayerHPNum").GetComponent<Text>().text = Convert.ToString(playerScript.hp) + "/" + Convert.ToString(playerScript.maxHP);
+        GameObject.Find("PlayerFPNum").GetComponent<Text>().text = Convert.ToString(playerScript.fp) + "/" + Convert.ToString(playerScript.maxFP);
+        GameObject.Find("EnemyHPNum").GetComponent<Text>().text = Convert.ToString(enemy.HP);
+        GameObject.Find("PlayerEXPNum").GetComponent<Text>().text = Convert.ToString(playerScript.exp) 
+                                                                    + "/" + Convert.ToString(playerScript.toNextLevel);
+    }
+
+    private void updatePos(bool a){
+        if(enemy == GameObject.FindObjectOfType<Enemy1>(true)){
+            if(!enemy.isDark){
+                sprites[0].GetComponent<SpriteRenderer>().enabled = a;
+            }else{
+                sprites[1].GetComponent<SpriteRenderer>().enabled = a;
+            }
+        }else if(enemy == GameObject.FindObjectOfType<Enemy2>(true)){
+            if(!enemy.isDark){
+                sprites[2].GetComponent<SpriteRenderer>().enabled = a;
+            }else{
+                sprites[3].GetComponent<SpriteRenderer>().enabled = a;
+            }
+        }else if(enemy == GameObject.FindObjectOfType<Enemy1>(true)){
+            if(!enemy.isDark){
+                sprites[4].GetComponent<SpriteRenderer>().enabled = a;
+            }else{
+                sprites[5].GetComponent<SpriteRenderer>().enabled = a;
+            }
+        }
+    }
+
+    private void endBattle(){
+        enemy.resetStats();
+        playerScript.getEXP(enemy.EXP);
+        WorldManager wm = FindObjectOfType<WorldManager>();
+        wm.SwitchWorldFading(wm.world_before_battle);
+    }
+
     private void enemyDecisions(){
         System.Random rand = new System.Random();
+
+        if(enemy.HP <= 0){
+            endBattle();
+            return;
+        }
 
         if(rand.Next(1, 101) <= 90){
             attack(rand.Next(0,4), false);
