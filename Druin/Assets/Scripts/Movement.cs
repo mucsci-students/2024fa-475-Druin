@@ -7,7 +7,14 @@ public class Movement : MonoBehaviour
     private float moveTimer = 0f;       // Timer to track movement duration
     private Vector2 currentDirection;   // Current movement direction
 
+    public LayerMask borderLayerMask; // Expose this field in the Inspector
+
     public Vector2 CurrentDirection => currentDirection;
+
+    void Start()
+    {
+        borderLayerMask = LayerMask.GetMask("Border");
+    }
 
     public void Move()
     {
@@ -39,16 +46,21 @@ public class Movement : MonoBehaviour
         if (moveTimer <= 0f)
         {
             ResetRandomDirection();
+            return;
         }
 
-        transform.Translate(currentDirection * speed * Time.deltaTime);
-        moveTimer -= Time.deltaTime;
-
+        // Check if there is an obstacle ahead first
         if (IsObstacleAhead())
         {
             ResetRandomDirection();
+            return; // Stop moving if an obstacle is ahead
         }
+
+        // Move the monster if no obstacle detected
+        transform.Translate(currentDirection * speed * Time.deltaTime);
+        moveTimer -= Time.deltaTime;
     }
+
 
     private void ResetRandomDirection()
     {
@@ -64,9 +76,14 @@ public class Movement : MonoBehaviour
         moveTimer = moveDuration;
     }
 
+
     private bool IsObstacleAhead()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, currentDirection, 0.5f);
+        // Raycast using both tag filtering and layer mask to check for the Border layer
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, currentDirection, 1.0f, borderLayerMask);
+
+        // Ensure the hit object is tagged as "Border"
         return hit.collider != null && hit.collider.CompareTag("Border");
     }
+
 }
