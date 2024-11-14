@@ -7,19 +7,11 @@ public static class Items : object
     
     //This variable is meant to hold all the kinds of items we will have
     //the only interaction with this info is from getItemInfo
-    private static Item[] itemInfo= new[] {new Item("HP Restore", itemAffect.HealthPotion, 10),
+    public static Item[] itemInfo= new[] {new Item("HP Restore", itemAffect.HealthPotion, 10),
                             new Item("FP Restore", itemAffect.FPPotion, 10),
                             new Item("Attack Boost", itemAffect.StatBoostAttack, 10),
                             new Item("Defense Boost", itemAffect.StatBoostDefense, 10),
                             new Item("Throwing Knife", itemAffect.Throwable, 10)};
-
-    public static string getItemName(int index){
-        return itemInfo[index].name;
-    }
-
-    public static int getItemVal(int index){
-        return itemInfo[index].value;
-    }
 
     
 }
