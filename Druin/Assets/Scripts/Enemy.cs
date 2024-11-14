@@ -9,6 +9,15 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        if (CompareTag("Boss"))
+        {
+            GameObject.FindGameObjectWithTag("Boss").GetComponent<PolygonCollider2D>().enabled = false;
+            SpriteRenderer sr = GameObject.FindGameObjectWithTag("Boss").GetComponent<SpriteRenderer>();
+            Color c = sr.color;
+            c.a = 0.0f;
+            sr.color = c;
+        }
+
         animator = GetComponent<Animator>();
         movement = GetComponent<Movement>();
 
@@ -17,7 +26,18 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        UpdateAnimationDirection();
+        if (tag != "Boss")
+        {
+            UpdateAnimationDirection();
+        }
+        else if (FindObjectOfType<GameManager>().puzzleSolved && !GetComponent<PolygonCollider2D>().enabled)
+        {
+            GetComponent<PolygonCollider2D>().enabled = true;
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            Color c = sr.color;
+            c.a = 1.0f;
+            sr.color = c;
+        }
     }
 
     private void UpdateAnimationDirection()
