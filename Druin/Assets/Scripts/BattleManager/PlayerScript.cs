@@ -47,7 +47,7 @@ public class PlayerScript : MonoBehaviour
         exp = 0;
         toNextLevel = 10 + (12 * level);
         
-        attacks = new[] {new Attacks("name1", 0, (attack)), new Attacks("name2", 2, (2 * attack)), new Attacks("name3", 5, (5 * attack))};
+        attacks = new[] {new Attacks("Punch", 0, (attack)), new Attacks("Knife Attack", 2, (2 * attack)), new Attacks("Bow Shot", 5, (5 * attack))};
 
         items = new List<itemAffect>();
 
@@ -114,6 +114,17 @@ public class PlayerScript : MonoBehaviour
         
     }
 
+    public void boostAttack(){
+        attack += (3 + (int)(1.5 * level));
+        attacks[0].damage = attack;
+        attacks[1].damage = attack * 2;
+        attacks[2].damage = attack * 5;
+    }
+
+    public void boostDefense(){
+        defense += (3 + (int)(1.5 * level));
+    }
+
     public void loadBattleTexts(){
         battleTexts = new[] {GameObject.Find("PlayerAttack1").GetComponent<NPCConversation>() //index 0
                             , GameObject.Find("PlayerAttack2").GetComponent<NPCConversation>() // 1
@@ -126,7 +137,8 @@ public class PlayerScript : MonoBehaviour
                             , GameObject.Find("PlayerUseThrowable").GetComponent<NPCConversation>() // 8
                             , GameObject.Find("PlayerRunS").GetComponent<NPCConversation>() // 9
                             , GameObject.Find("PlayerRunF").GetComponent<NPCConversation>()// 10
-                            , GameObject.Find("PlayerNoFP").GetComponent<NPCConversation>()}; //11
+                            , GameObject.Find("PlayerNoFP").GetComponent<NPCConversation>()//11
+                            , GameObject.Find("PlayerNoItem").GetComponent<NPCConversation>()}; //12
 
         
     }

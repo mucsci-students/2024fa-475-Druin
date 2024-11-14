@@ -111,7 +111,7 @@ public class BattleManager : MonoBehaviour
 
 
             //in menu 1 or 2, pressing the up key will ensure that the cursor goes to the top row
-            if(Input.GetKeyDown(KeyCode.UpArrow)){
+            if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)){
                 if(getCursorY() == -4.21f){
                     if(getCursorX() == -3f){
                         setCursorPos(0);
@@ -140,7 +140,7 @@ public class BattleManager : MonoBehaviour
             }
 
             //In menu 1 or 2, will ensure that the cursor goes to the bottom row
-            if(Input.GetKeyDown(KeyCode.DownArrow)){
+            if(Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)){
                 if(getCursorY() == -2.84f){
                     if(getCursorX() == -3f){
                         setCursorPos(1);
@@ -169,7 +169,7 @@ public class BattleManager : MonoBehaviour
             }
 
             //for menu 1 or 2, will ensure that the cursor goes to the 2nd column
-            if(Input.GetKeyDown(KeyCode.RightArrow) && (getCursorX() == -3f)){
+            if((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && (getCursorX() == -3f)){
                 if(getCursorY() == -2.84f){
                     setCursorPos(2);
                 }else{
@@ -178,7 +178,7 @@ public class BattleManager : MonoBehaviour
             }
 
             //for menu 1 or 2, will ensure that the cursor goes to the 1st column
-            if(Input.GetKeyDown(KeyCode.LeftArrow) && (getCursorX() == 0.8f)){
+            if((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && (getCursorX() == 0.8f)){
                 if(getCursorY() == -2.84f){
                     setCursorPos(0);
                 }else{
@@ -424,26 +424,48 @@ public class BattleManager : MonoBehaviour
     public void useItem(int used){
         playerScript.stopDefending();
         if(used == 0){
-            //Check to see if the player has an item of this type
-            Item item = Items.itemInfo[0];
-            playerScript.hp += item.value;
-            ConversationManager.Instance.StartConversation(playerScript.battleTexts[4]); //HP Dialogue
+            if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.HealthPotion)){
+                Item item = Items.itemInfo[0];
+                playerScript.hp += item.value;
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[4]); //HP Dialogue
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
+            }
+            
         }else if(used == 1){
-            //Check to see if player has an item of this type
-            Item item = Items.itemInfo[1];
-            playerScript.fp += item.value;
-            ConversationManager.Instance.StartConversation(playerScript.battleTexts[5]); //FP Dialogue
+            if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.FPPotion)){
+                Item item = Items.itemInfo[1];
+                playerScript.fp += item.value;
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[5]); //FP Dialogue
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
+            }
+            
         }else if(used == 2){
-            //use item
-            ConversationManager.Instance.StartConversation(playerScript.battleTexts[6]); //AttackBoostDialogue
+            if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.StatBoostAttack)){
+                playerScript.boostAttack();
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[6]); //AttackBoostDialogue
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
+            }
+            
         }else if(used == 3){
-            //use item
-            ConversationManager.Instance.StartConversation(playerScript.battleTexts[7]); //DefenseDialogue
+            if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.StatBoostAttack)){
+                playerScript.boostDefense();
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[7]); //DefenseDialogue
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
+            }
+            
         }else{
-            //check to see if player has an item of this type
-            Item item = Items.itemInfo[1];
-            enemy.HP -= item.value;
-            ConversationManager.Instance.StartConversation(playerScript.battleTexts[8]); //ThrowablesDialogue
+            if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.Throwable)){
+                Item item = Items.itemInfo[1];
+                enemy.HP -= item.value;
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[8]); //ThrowablesDialogue
+            }else{
+                ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
+            }
+            
         }
 
         //creat method to update bars for player and enemy
