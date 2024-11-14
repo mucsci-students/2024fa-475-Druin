@@ -8,7 +8,11 @@ public class PlayerScript : MonoBehaviour
 
     public int hp;
 
+    public int maxHP;
+
     public int fp;
+
+    public int maxFP;
 
     public int attack;
 
@@ -28,23 +32,50 @@ public class PlayerScript : MonoBehaviour
 
     public NPCConversation[] battleTexts;
 
-    public int enemy;
-
     // Start is called before the first frame update
     void Start()
     {
         level = 1;
 
-        hp = 285 + (15 * level);
-        fp = 18 + (2 * level);
+        maxHP = 85 + (15 * level);
+        hp = maxHP;
+        maxFP = 18 + (2 * level);
+        fp = maxFP;
         attack = 10 + (3 * level);
-        defense = 10 + (2 * level);
+        defense = 5 + (2 * level);
+
+        exp = 0;
+        toNextLevel = 10 + (12 * level);
         
-        attacks = new[] {new Attacks("name1", 0, (5 * attack)), new Attacks("name2", 0, (10 * attack)), new Attacks("name3", 0, (12 * attack))};
+        attacks = new[] {new Attacks("name1", 0, (attack)), new Attacks("name2", 2, (2 * attack)), new Attacks("name3", 5, (5 * attack))};
 
         items = new List<itemAffect>();
 
         
+    }
+
+    public void getEXP(int val){
+        exp += val;
+        if(exp >= toNextLevel){
+            exp -= toNextLevel;
+            levelUP();
+        }
+    }
+
+    private void levelUP(){
+        level++;
+
+        maxHP = 85 + (15 * level);
+        hp = maxHP;
+        maxFP = 18 + (2 * level);
+        fp = maxFP;
+        attack = 10 + (3 * level);
+        defense = 5 + (2 * level);
+        toNextLevel = 10 + (12 * level);
+
+        attacks[0].damage = attack;
+        attacks[1].damage = attack * 2;
+        attacks[2].damage = attack * 5;
     }
 
     public void setDefending(){
@@ -83,7 +114,7 @@ public class PlayerScript : MonoBehaviour
         
     }
 
-    public void loadBattle(){
+    public void loadBattleTexts(){
         battleTexts = new[] {GameObject.Find("PlayerAttack1").GetComponent<NPCConversation>() //index 0
                             , GameObject.Find("PlayerAttack2").GetComponent<NPCConversation>() // 1
                             , GameObject.Find("PlayerAttack3").GetComponent<NPCConversation>() // 2
@@ -94,9 +125,10 @@ public class PlayerScript : MonoBehaviour
                             , GameObject.Find("PlayerDefenseBoost").GetComponent<NPCConversation>() // 7
                             , GameObject.Find("PlayerUseThrowable").GetComponent<NPCConversation>() // 8
                             , GameObject.Find("PlayerRunS").GetComponent<NPCConversation>() // 9
-                            , GameObject.Find("PlayerRunF").GetComponent<NPCConversation>()}; // 10
+                            , GameObject.Find("PlayerRunF").GetComponent<NPCConversation>()// 10
+                            , GameObject.Find("PlayerNoFP").GetComponent<NPCConversation>()}; //11
 
-        GameObject.Find("BattleManager").GetComponent<BattleManager>().setEnemy(enemy);
+        
     }
     
 

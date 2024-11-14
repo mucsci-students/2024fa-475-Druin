@@ -53,14 +53,26 @@ public class Enemy : MonoBehaviour
             if (wm.isTransitioning || activeWorld == "BattleScene") return;
 
             // TODO: Uncomment when hooking battle scene to the main world
-             PlayerScript ps = FindObjectOfType<PlayerScript>();
+             BattleManager bm = FindObjectOfType<BattleManager>(true);
             // // Start the battle
 
             // // set enemy of battle manager
-             ps.enemy = 0;// *depending on the enemy, just pass an int 0-2 instead of the game object*
+            // *depending on the enemy, just pass an int 0-2 instead of the game object*
+             if(gameObject.tag == "PumpkinLight"){
+                bm.setEnemy(0, false);
+             }else if(gameObject.tag == "PumpkinDark"){
+                bm.setEnemy(0,true);
+             }else if(gameObject.tag == "GhostLight"){
+                bm.setEnemy(1,false);
+             }else if(gameObject.tag == "GhostDark"){
+                bm.setEnemy(1,true);
+             }else if(gameObject.tag == "BatLight"){
+                bm.setEnemy(2,false);
+             }else if(gameObject.tag == "BatDark"){
+                bm.setEnemy(2,true);
+             }
 
             // // set world of battle manager
-            // bm.world = wm.GetActiveWorld();
 
             wm.world_before_battle = activeWorld;
             Destroy(gameObject);

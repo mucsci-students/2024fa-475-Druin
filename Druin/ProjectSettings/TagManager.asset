@@ -6,6 +6,12 @@ TagManager:
   tags:
   - Cursor
   - Border
+  - PumpkinLight
+  - PumpkinDark
+  - GhostLight
+  - GhostDark
+  - BatLight
+  - BatDark
   layers:
   - Default
   - TransparentFX
