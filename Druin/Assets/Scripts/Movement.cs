@@ -11,6 +11,7 @@ public class Movement : MonoBehaviour
 
     public Vector2 CurrentDirection => currentDirection;
     private bool facingRight = true;
+    private Vector2 lastMoveDirection;
     private Animator animator;
 
     void Start()
@@ -28,6 +29,7 @@ public class Movement : MonoBehaviour
         // Update direction if there's movement
         if (moveVector != Vector2.zero)
         {
+            lastMoveDirection = moveVector.normalized;
             currentDirection = moveVector.normalized;
 
             // Set animation based on movement direction
@@ -45,7 +47,29 @@ public class Movement : MonoBehaviour
                 FlipSprite(moveX); // Flip the sprite based on left/right direction
             }
         }
+        else
+        {
+            SetIdleAnimation();
+        }
+
         transform.Translate(moveVector);
+    }
+
+    private void SetIdleAnimation()
+    {
+        // Check the last movement direction and set the appropriate idle animation
+        if (lastMoveDirection.y < 0) // Last movement was down
+        {
+            animator.Play("ForwardIdle");
+        }
+        else if (lastMoveDirection.y > 0) // Last movement was up
+        {
+            animator.Play("Idleback");
+        }
+        else // Last movement was left or right
+        {
+            animator.Play("SideIdle");
+        }
     }
 
     private void FlipSprite(float moveX)
