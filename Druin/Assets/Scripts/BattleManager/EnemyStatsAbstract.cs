@@ -17,6 +17,12 @@ public abstract class EnemyStats : MonoBehaviour
 
     public bool isDark;
 
+    public bool isBoss;
+
+    public bool windUpAttack;
+
+    public int windUpTurn;
+
     public Attacks[] attacks;
 
     public NPCConversation[] battleTexts;

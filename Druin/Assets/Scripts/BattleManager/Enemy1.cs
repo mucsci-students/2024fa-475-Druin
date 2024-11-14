@@ -11,6 +11,7 @@ public class Enemy1 : EnemyStats
         Attack = 50;
         Defense = 5;
         EXP = 15;
+        isBoss = false;
 
         attacks = new[] {new Attacks("attack1", 0, 10), new Attacks("attack2", 0, 12), new Attacks("attack3", 1, 18)};
 

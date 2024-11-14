@@ -51,7 +51,17 @@ public class PlayerScript : MonoBehaviour
 
         items = new List<itemAffect>();
 
-        
+        for(int i = 0; i < 10; i++){
+            items.Add(itemAffect.HealthPotion);
+            items.Add(itemAffect.FPPotion);
+        }
+        for(int i = 0; i < 5; i++){
+            items.Add(itemAffect.StatBoostAttack);
+            items.Add(itemAffect.StatBoostDefense);
+        }
+        for(int i = 0; i < 20; i++){
+            items.Add(itemAffect.Throwable);
+        }
     }
 
     public void getEXP(int val){

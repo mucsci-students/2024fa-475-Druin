@@ -70,6 +70,8 @@ public class Enemy : MonoBehaviour
                 bm.setEnemy(2,false);
              }else if(gameObject.tag == "BatDark"){
                 bm.setEnemy(2,true);
+             }else if(gameObject.tag == "Boss"){
+                bm.setEnemy(3,false);
              }
 
             // // set world of battle manager

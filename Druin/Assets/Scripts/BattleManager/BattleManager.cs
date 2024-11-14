@@ -405,7 +405,7 @@ public class BattleManager : MonoBehaviour
                     playerScript.hp -= damage;
                 }
                 ConversationManager.Instance.StartConversation(enemy.battleTexts[0]);
-            }else{
+            }else if(index == 1){
                 Attacks a = enemy.attacks[1];
                 int damage = a.damage;
                 damage -= playerScript.defense;
@@ -413,6 +413,29 @@ public class BattleManager : MonoBehaviour
                     playerScript.hp -= damage;
                 }
                 ConversationManager.Instance.StartConversation(enemy.battleTexts[1]);
+
+
+                //These next two options will only apply to the boss
+            }else if(index == 2){
+                Attacks a = enemy.attacks[2];
+                int damage = a.damage;
+                damage += enemy.HP;
+                ConversationManager.Instance.StartConversation(enemy.battleTexts[2]);
+            }else if(index == 3){
+                if(enemy.windUpAttack == false){
+                    enemy.windUpAttack = true;
+                    enemy.windUpTurn = (turnCount + 2);
+                    ConversationManager.Instance.StartConversation(enemy.battleTexts[3]);
+                }else{
+                    Attacks a = enemy.attacks[3];
+                    int damage = a.damage;
+
+                    damage -= playerScript.defense;
+                    if(damage > 0){
+                        playerScript.hp -= damage;
+                    }
+                    ConversationManager.Instance.StartConversation(enemy.battleTexts[4]);
+                }
             }
         }
 
@@ -512,6 +535,8 @@ public class BattleManager : MonoBehaviour
         }else if(foe == 2){
             enemy = GameObject.FindObjectOfType<Enemy3>(true);
             enemy.isDark = isDark;
+        }else if(foe == 3){
+            enemy = GameObject.FindObjectOfType<Boss>(true);
         }
         isReady = false;
     }
@@ -553,6 +578,7 @@ public class BattleManager : MonoBehaviour
         GameObject.Find("EnemyHPNum").GetComponent<Text>().text = Convert.ToString(enemy.HP);
         GameObject.Find("PlayerEXPNum").GetComponent<Text>().text = Convert.ToString(playerScript.exp) 
                                                                     + "/" + Convert.ToString(playerScript.toNextLevel);
+        GameObject.Find("TurnNum").GetComponent<Text>().text = Convert.ToString(turnCount);
     }
 
     private void updatePos(bool a){
@@ -586,17 +612,31 @@ public class BattleManager : MonoBehaviour
 
     private void enemyDecisions(){
         System.Random rand = new System.Random();
-
         if(enemy.HP <= 0){
             endBattle();
             return;
         }
 
-        if(rand.Next(1, 101) <= 90){
-            attack(rand.Next(0,4), false);
+        if(enemy.isBoss == false){
+            
+            if(rand.Next(1, 101) <= 90){
+                attack(rand.Next(0,2), false);
+            }else{
+                attemptToRun(false);
+            }
         }else{
-            attemptToRun(false);
+            if(enemy.windUpAttack == true){
+                if(enemy.windUpTurn == turnCount){
+                    attack(4,false);
+                }else{
+                    ConversationManager.Instance.StartConversation(enemy.battleTexts[4]);
+                }
+            }else{
+                attack(rand.Next(0,4), false);
+            }
+            
         }
+        
         enemysTurn = true;
         turnCount++;
     }
