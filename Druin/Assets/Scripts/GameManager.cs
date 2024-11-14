@@ -1,3 +1,4 @@
+using DialogueEditor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour
 
     public WorldManager worldManager;
 
+    public bool puzzleSolved = false;
+
     void Start()
     {
         worldManager = FindObjectOfType<WorldManager>();
@@ -28,6 +31,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (ConversationManager.Instance.IsConversationActive)
+        {
+            return;
+        }
         if (worldManager.isTransitioning || worldManager.IsWorldActive("BattleScene"))
         {
             return;
