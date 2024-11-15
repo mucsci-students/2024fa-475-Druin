@@ -271,7 +271,7 @@ public class BattleManager : MonoBehaviour
                         updateNums();
                         changeMenu(0);
                         if(runSuccess == true){
-                            endBattle();
+                            endBattle(false);
                         }else{
                             enemyDecisions();
                         }
@@ -284,7 +284,7 @@ public class BattleManager : MonoBehaviour
                         ConversationManager.Instance.PressSelectedOption();
                         updateNums();
                         if(playerScript.hp <= 0 || runSuccess == true){
-                            endBattle();
+                            endBattle(false);
                         }
                         }
                     }
@@ -604,9 +604,12 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void endBattle(){
+    private void endBattle(bool playerWon){
         enemy.resetStats();
-        playerScript.getEXP(enemy.EXP);
+        if(playerWon){
+            playerScript.getEXP(enemy.EXP);
+        }
+        
         WorldManager wm = FindObjectOfType<WorldManager>();
         wm.SwitchWorldFading(wm.world_before_battle);
     }
@@ -614,7 +617,7 @@ public class BattleManager : MonoBehaviour
     private void enemyDecisions(){
         System.Random rand = new System.Random();
         if(enemy.HP <= 0){
-            endBattle();
+            endBattle(true);
             return;
         }
 
