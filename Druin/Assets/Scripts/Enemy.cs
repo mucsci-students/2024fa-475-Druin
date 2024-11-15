@@ -97,7 +97,10 @@ public class Enemy : MonoBehaviour
             // // set world of battle manager
 
             wm.world_before_battle = activeWorld;
-            Destroy(gameObject);
+            if (tag != "Boss")
+            {
+                Destroy(gameObject);
+            }
 
             wm.SwitchWorldFading("BattleScene");
         }
