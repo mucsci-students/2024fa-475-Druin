@@ -95,4 +95,30 @@ public class PauseInventoryDisplay : MonoBehaviour
             Debug.Log("No HP items available.");
         }
     }
+
+    public void UseFPItem()
+    {
+        if (player == null) return;
+
+        // Find the current amount of HP items
+        int fpItemCount = 0;
+        for (int j = 0; j < player.itemAmount(); j++)
+        {
+            if (player.getAccessToItem(j) == itemAffect.FPPotion)
+            {
+                fpItemCount++;
+            }
+        }
+
+        // Only use an item if there’s at least one HP item available
+        if (fpItemCount > 0)
+        {
+            player.useItem(itemAffect.FPPotion); 
+            UpdateInventoryDisplay();
+        }
+        else
+        {
+            Debug.Log("No HP items available.");
+        }
+    }
 }
