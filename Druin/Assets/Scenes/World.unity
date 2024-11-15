@@ -282,6 +282,7 @@ GameObject:
   - component: {fileID: 29455469}
   - component: {fileID: 29455473}
   - component: {fileID: 29455474}
+  - component: {fileID: 29455475}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -402,6 +403,20 @@ MonoBehaviour:
   pauseMenuUI: {fileID: 550371224}
   settingsBackground: {fileID: 1702935909}
   quitPrompt: {fileID: 1325773049}
+--- !u!114 &29455475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29455468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e83e8ea17eb9da4e83c7960184125b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myMixer: {fileID: 24100000, guid: 9f4fe3bd08e282d458b7a6ab5bd62b56, type: 2}
+  musicSlider: {fileID: 630630954}
 --- !u!1 &61850013
 GameObject:
   m_ObjectHideFlags: 0
@@ -2512,7 +2527,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 29455475}
         m_TargetAssemblyTypeName: VolumeSettings, Assembly-CSharp
         m_MethodName: SetMusicVolume
         m_Mode: 1
