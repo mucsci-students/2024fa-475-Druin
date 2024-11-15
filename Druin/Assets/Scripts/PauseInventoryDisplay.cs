@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 // Modified Menu3 for the UI without battle manager pieces
 public class PauseInventoryDisplay : MonoBehaviour
@@ -63,6 +64,9 @@ public class PauseInventoryDisplay : MonoBehaviour
         {
             itemTexts[i].GetComponent<Text>().text = nums[i].ToString();
         }
+
+        GameObject.Find("Health Text").GetComponent<TMP_Text>().text = "Health: " + Convert.ToString(player.hp);
+        GameObject.Find("Level").GetComponent<TMP_Text>().text = "Level: " + Convert.ToString(player.level);
     }
 
     // Method to use an HP item and reduce its count

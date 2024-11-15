@@ -44,6 +44,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);    
         Time.timeScale = 0.0001f;
         isPaused = true;
+        FindObjectOfType<PauseInventoryDisplay>().UpdateInventoryDisplay();
     }
 
     public void ResumeGame()
