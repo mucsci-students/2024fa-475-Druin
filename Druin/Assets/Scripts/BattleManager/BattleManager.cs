@@ -609,6 +609,20 @@ public class BattleManager : MonoBehaviour
         if(playerWon){
             playerScript.getEXP(enemy.EXP);
         }
+
+        // MDF: Lose a battle
+        if (playerScript.hp <= 0)
+        {
+            playerScript.hp = playerScript.maxHP;
+            GameObject.FindGameObjectWithTag("Player").transform.position =
+            new Vector3(-36.6234245f,-14.368206f,0f);
+        }
+        else if (enemy.isBoss)
+        {
+            // Defeat boss
+            GameObject.FindGameObjectWithTag("Player").transform.position =
+            new Vector3(-260.429993f,101.160004f,0f);
+        }
         
         WorldManager wm = FindObjectOfType<WorldManager>();
         wm.SwitchWorldFading(wm.world_before_battle);
