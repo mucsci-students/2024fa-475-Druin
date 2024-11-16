@@ -432,7 +432,7 @@ public class BattleManager : MonoBehaviour
 
         //Create a method to update the healthbar for the player/enemy
 
-    }
+    
 
     //calls for the items effect, and applies it to the player
     public void useItem(int used){
