@@ -623,7 +623,7 @@ public class BattleManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").transform.position =
             new Vector3(-260.429993f,101.160004f,0f);
         }
-        
+        turnCount = 0;
         WorldManager wm = FindObjectOfType<WorldManager>();
         wm.SwitchWorldFading(wm.world_before_battle);
     }

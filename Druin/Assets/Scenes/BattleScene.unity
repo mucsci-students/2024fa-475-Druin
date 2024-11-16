@@ -2204,6 +2204,7 @@ GameObject:
   - component: {fileID: 409189469}
   - component: {fileID: 409189468}
   - component: {fileID: 409189467}
+  - component: {fileID: 409189470}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -2293,6 +2294,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bcb12900e2d62c5498de7f9c587291a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyName: 
+  HP: 0
+  Attack: 0
+  Defense: 0
+  EXP: 0
+  isDark: 0
+  isBoss: 0
+  windUpAttack: 0
+  windUpTurn: 0
+  battleTexts: []
+--- !u!114 &409189470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409189464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bac19437a391d745be534ec9a87ccfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
