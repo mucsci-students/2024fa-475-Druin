@@ -2793,8 +2793,8 @@ MonoBehaviour:
     King","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":2}],"EditorInfo":{"isRoot":false,"xPos":101,"yPos":139},"ID":3,"ParamActions":[],"TMPFontGUID":null,"Text":"Trick
     or Treat! Trick or Treat! Trick or Treat!","parentUIDs":[0],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Dark
     Monster","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":1}],"EditorInfo":{"isRoot":false,"xPos":120,"yPos":465},"ID":4,"ParamActions":[],"TMPFontGUID":null,"Text":"Every
-    creature has two sides, dark and light. You can''t spare a single dark creature
-    to survive or they will kill you!","parentUIDs":[2],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Light
+    creature has two sides, dark and light. You can''t let a single dark monster
+    slip through or they will kill you!","parentUIDs":[2],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Light
     King","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
   saveVersion: 110
   DefaultName: 
