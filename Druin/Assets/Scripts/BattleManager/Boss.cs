@@ -13,7 +13,7 @@ public class Boss : EnemyStats
         EXP = 15;
         isBoss = true;
 
-        attacks = new[] {new Attacks("Palm strike", 0, 20), new Attacks("Antler stab", 0, 35), new Attacks("Heal",0, 80),new Attacks("Absolute Darkness", 1, 300)};
+        attacks = new[] {new Attacks("Palm strike", 0, 30), new Attacks("Antler stab", 0, 95), new Attacks("Heal",0, 80),new Attacks("Absolute Darkness", 1, 300)};
 
         battleTexts = new[] {GameObject.Find("BossAttack1").GetComponent<NPCConversation>()
                             , GameObject.Find("BossAttack2").GetComponent<NPCConversation>()
@@ -23,6 +23,6 @@ public class Boss : EnemyStats
     }
 
     public override void resetStats(){
-        HP = 3000;
+        HP = 2000;
     }
 }

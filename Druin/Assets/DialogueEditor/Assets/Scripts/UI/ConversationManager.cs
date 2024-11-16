@@ -191,6 +191,11 @@ namespace DialogueEditor
 
             UIConversationButton button = m_uiOptions[m_currentSelectedIndex];
             button.OnButtonPressed();
+
+            WorldManager wm = FindObjectOfType<WorldManager>();
+            if(wm.GetActiveWorld() == "BattleScene"){
+                FindObjectOfType<BattleManager>().battleLogic();
+            }
         }
 
         public void AlertHover(UIConversationButton button)

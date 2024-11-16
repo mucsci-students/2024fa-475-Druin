@@ -79,7 +79,8 @@ public class BattleManager : MonoBehaviour
                             ,GameObject.Find("GhostLight")
                             ,GameObject.Find("GhostDark")
                             ,GameObject.Find("BatLight")
-                            ,GameObject.Find("BatDark")};
+                            ,GameObject.Find("BatDark")
+                            ,GameObject.Find("Boss")};
 
         //this code finds the cursor game object and ensures that it is at the start position
         cursor = GameObject.FindWithTag("Cursor");
@@ -107,7 +108,7 @@ public class BattleManager : MonoBehaviour
         Whenever an option is chosen that would end the players turn,
         A message will be displayed which will pause interaction with the menus
         */
-        if(ConversationManager.Instance != null && !ConversationManager.Instance.IsConversationActive){
+        if(!ConversationManager.Instance.IsConversationActive){
 
 
             //in menu 1 or 2, pressing the up key will ensure that the cursor goes to the top row
@@ -265,32 +266,35 @@ public class BattleManager : MonoBehaviour
                     //when a message is displayed this will handle continuing on
                     //to ensure that the player goes second, the enemies decision making will go as soon as the
                     //players message is dismissed
-                    if(!enemysTurn){
-                        if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)){
+                    if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)){
                         ConversationManager.Instance.PressSelectedOption();
-                        updateNums();
-                        changeMenu(0);
-                        if(runSuccess == true){
-                            endBattle(false);
-                        }else{
-                            enemyDecisions();
-                        }
-                        }
-
-                        //will handle interaction with the enemy battle messages
-                    }else{
-                        if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)){
-                        enemysTurn = false;
-                        ConversationManager.Instance.PressSelectedOption();
-                        updateNums();
-                        if(playerScript.hp <= 0 || runSuccess == true){
-                            endBattle(false);
-                        }
-                        }
                     }
             
         }
     }
+
+    public void battleLogic(){
+        if(!enemysTurn){
+                                
+                                    updateNums();
+                                    changeMenu(0);
+                                    if(runSuccess == true){
+                                        endBattle(false);
+                                    }else{
+                                        enemyDecisions();
+                                    }
+                                
+                            //will handle interaction with the enemy battle messages
+                        }else{
+                                    enemysTurn = false;
+                                    updateNums();
+                                    if(playerScript.hp <= 0 || runSuccess == true){
+                                        endBattle(false);
+                                    }
+                                
+                        }
+    }
+
 
     //When called switches the menu to the one desired
     public void changeMenu(int index){
@@ -422,21 +426,7 @@ public class BattleManager : MonoBehaviour
                 int damage = a.damage;
                 damage += enemy.HP;
                 ConversationManager.Instance.StartConversation(enemy.battleTexts[2]);
-            }else if(index == 3){
-                if(enemy.windUpAttack == false){
-                    enemy.windUpAttack = true;
-                    enemy.windUpTurn = (turnCount + 2);
-                    ConversationManager.Instance.StartConversation(enemy.battleTexts[3]);
-                }else{
-                    Attacks a = enemy.attacks[3];
-                    int damage = a.damage;
-
-                    damage -= playerScript.defense;
-                    if(damage > 0){
-                        playerScript.hp -= damage;
-                    }
-                    ConversationManager.Instance.StartConversation(enemy.battleTexts[4]);
-                }
+            }
             }
         }
 
@@ -450,7 +440,11 @@ public class BattleManager : MonoBehaviour
         if(used == 0){
             if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.HealthPotion)){
                 Item item = Items.itemInfo[0];
-                playerScript.hp += item.value;
+                if((playerScript.maxHP) <= item.value || (item.value + playerScript.hp) >= playerScript.maxHP){
+                    playerScript.hp = playerScript.maxHP;
+                }else{
+                    playerScript.hp += item.value;
+                }
                 ConversationManager.Instance.StartConversation(playerScript.battleTexts[4]); //HP Dialogue
             }else{
                 ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
@@ -459,7 +453,11 @@ public class BattleManager : MonoBehaviour
         }else if(used == 1){
             if(playerScript.itemAmount() != 0 && playerScript.useItem(itemAffect.FPPotion)){
                 Item item = Items.itemInfo[1];
-                playerScript.fp += item.value;
+                if((playerScript.maxFP) <= item.value || (item.value + playerScript.fp) >= playerScript.maxFP){
+                    playerScript.fp = playerScript.maxFP;
+                }else{
+                    playerScript.fp += item.value;
+                }
                 ConversationManager.Instance.StartConversation(playerScript.battleTexts[5]); //FP Dialogue
             }else{
                 ConversationManager.Instance.StartConversation(playerScript.battleTexts[12]);
@@ -574,6 +572,7 @@ public class BattleManager : MonoBehaviour
 
 
     private void updateNums(){
+        player.GetComponent<SpriteRenderer>().enabled = false;
         GameObject.Find("PlayerHPNum").GetComponent<Text>().text = Convert.ToString(playerScript.hp) + "/" + Convert.ToString(playerScript.maxHP);
         GameObject.Find("PlayerFPNum").GetComponent<Text>().text = Convert.ToString(playerScript.fp) + "/" + Convert.ToString(playerScript.maxFP);
         GameObject.Find("EnemyHPNum").GetComponent<Text>().text = Convert.ToString(enemy.HP);
@@ -595,17 +594,21 @@ public class BattleManager : MonoBehaviour
             }else{
                 sprites[3].GetComponent<SpriteRenderer>().enabled = a;
             }
-        }else if(enemy == GameObject.FindObjectOfType<Enemy1>(true)){
+        }else if(enemy == GameObject.FindObjectOfType<Enemy3>(true)){
             if(!enemy.isDark){
                 sprites[4].GetComponent<SpriteRenderer>().enabled = a;
             }else{
                 sprites[5].GetComponent<SpriteRenderer>().enabled = a;
             }
+        }else if(enemy == GameObject.FindObjectOfType<Boss>(true)){
+            sprites[6].GetComponent<SpriteRenderer>().enabled = a;
         }
     }
 
     private void endBattle(bool playerWon){
+        runSuccess = false;
         enemy.resetStats();
+        player.GetComponent<SpriteRenderer>().enabled = true;
         if(playerWon){
             playerScript.getEXP(enemy.EXP);
         }
@@ -643,15 +646,8 @@ public class BattleManager : MonoBehaviour
                 attemptToRun(false);
             }
         }else{
-            if(enemy.windUpAttack == true){
-                if(enemy.windUpTurn == turnCount){
-                    attack(4,false);
-                }else{
-                    ConversationManager.Instance.StartConversation(enemy.battleTexts[4]);
-                }
-            }else{
-                attack(rand.Next(0,4), false);
-            }
+            
+                attack(rand.Next(0,3), false);
             
         }
         

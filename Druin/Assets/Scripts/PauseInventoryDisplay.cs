@@ -65,7 +65,7 @@ public class PauseInventoryDisplay : MonoBehaviour
             itemTexts[i].GetComponent<Text>().text = nums[i].ToString();
         }
 
-        GameObject.Find("Health Text").GetComponent<TMP_Text>().text = "Health: " + Convert.ToString(player.hp);
+        GameObject.Find("Health Text").GetComponent<TMP_Text>().text = "Health: " + Convert.ToString(player.hp) + "/" + Convert.ToString(player.maxHP);
         GameObject.Find("Level").GetComponent<TMP_Text>().text = "Level: " + Convert.ToString(player.level);
     }
 
@@ -88,6 +88,17 @@ public class PauseInventoryDisplay : MonoBehaviour
         if (hpItemCount > 0)
         {
             player.useItem(itemAffect.HealthPotion); 
+
+            //Im just being lazy and copy pasting this here, I understand what went wrong,
+            //my use item within the playerscript should have actually applied the item effect,
+            //instead of just deleting the item from the inventory
+            Item item = Items.itemInfo[0];
+                if((player.maxHP) <= item.value || (item.value + player.hp) >= player.maxHP){
+                    player.hp = player.maxHP;
+                }else{
+                    player.hp += item.value;
+                }
+
             UpdateInventoryDisplay();
         }
         else
@@ -114,6 +125,15 @@ public class PauseInventoryDisplay : MonoBehaviour
         if (fpItemCount > 0)
         {
             player.useItem(itemAffect.FPPotion); 
+
+            //Same with this one
+            Item item = Items.itemInfo[1];
+            if((player.maxFP) <= item.value || (item.value + player.fp) >= player.maxFP){
+                    player.fp = player.maxFP;
+                }else{
+                    player.fp += item.value;
+                }
+
             UpdateInventoryDisplay();
         }
         else
