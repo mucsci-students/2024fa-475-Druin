@@ -5,7 +5,7 @@ using UnityEngine;
 public class Ratio : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    void Awake()
 {
     SetRatio(5, 4); // Set aspect ratio to 3:4
 }
